@@ -38,3 +38,4 @@ node_modules/
 *.php.inc
 *.js.inc
 
+platform/classes/*/vendor
