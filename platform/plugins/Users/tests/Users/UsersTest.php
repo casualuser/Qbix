@@ -1,6 +1,7 @@
 <?php
 
-//require(Q_CLASSES_DIR.DS.'Q.php'); 
+define ('APP_DIR', dirname(__FILE__)."/../../../../../MyApp/");
+include (dirname(__FILE__)."/../../../../Q.php");
 
 class UsersTest extends PHPUnit_Framework_TestCase
 {
@@ -22,16 +23,14 @@ class UsersTest extends PHPUnit_Framework_TestCase
         print __METHOD__ . "\n";
     }
 
-    public function loggedInUser()
+    public function testLoggedInUser()
     {
 		print __METHOD__ . "\n";
 
-    	if (true) {
-    		User = Users::identify();
-    	}
+	    new	Users_User();
     }
 
-    public function register()
+    public function testRegister()
     {
 		print __METHOD__ . "\n";
     }
