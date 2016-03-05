@@ -9,6 +9,10 @@ before_script:
 
 before_script: 
 - phpunit --version
+- pwd
+- ls -la /
+- cd 
+- ls -la
 - php /MyApp/scripts/Q/configure.php
 - php /MyApp/scripts/Q/install.php --all
 
