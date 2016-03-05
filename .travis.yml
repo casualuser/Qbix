@@ -8,8 +8,8 @@ before_script:
 - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS myapp;" -uroot; fi
 
 before_script: 
+- phpunit --version
 - php /MyApp/scripts/Q/configure.php
 - php /MyApp/scripts/Q/install.php --all
-- phpunit --version
 
 script: phpunit -c /platform/tests/q.phpunit.xml
