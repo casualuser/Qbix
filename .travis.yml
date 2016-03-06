@@ -11,7 +11,8 @@ install:
 
 before_script: 
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS myapp;" -uroot; fi
-  - mkdir -P /projects/qbix/Q && ln -s /home/travis/build/casualuser/Qbix/ /projects/qbix/Q/
+  - mkdir -p /projects/qbix/Q 
+  - ln -s /home/travis/build/casualuser/Qbix /projects/qbix/Q
   - php /home/travis/build/casualuser/Qbix/MyApp/scripts/Q/configure.php
   - php /home/travis/build/casualuser/Qbix/MyApp/scripts/Q/install.php --all
 
