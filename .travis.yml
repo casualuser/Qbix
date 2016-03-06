@@ -12,19 +12,20 @@ before_install:
   - sudo apt-get update > /dev/null
 
 install:
-  - sudo apt-get install -y --force-yes nodejs jq
+  - sudo apt-get install -y --force-yes nodejs npm jq
 
 before_script: 
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS myapp;" -uroot; fi
   - sudo mkdir -p /projects/qbix/Q
   - sudo cp -a /home/travis/build/casualuser/Qbix/. /projects/qbix/Q/
   - sudo chown -R travis:travis /projects/qbix/Q
-  - ls -la /projects/qbix/Q/
   - php /projects/qbix/Q/MyApp/scripts/Q/configure.php MyApp
   - jq 'del(.Q.localNotYetConfigured)' /projects/qbix/Q/MyApp/local/app.json | jq '.Q.web.controllerSuffix = ""'
 
   - php /projects/qbix/Q/MyApp/scripts/Q/install.php --all
 
+  - pwd
+  - cd /projects/qbix/Q/ && npm install
   - node --debug /projects/qbix/Q/MyApp/scripts/MyApp/MyApp.js
 
 script: 
