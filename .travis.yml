@@ -12,7 +12,7 @@ before_install:
   - sudo apt-get update > /dev/null
 
 install:
-  - sudo apt-get install -y --force-yes nodejs jq
+  - sudo apt-get install -y --force-yes nodejs nodejs-legacy jq
 
 before_script: 
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS myapp;" -uroot; fi
