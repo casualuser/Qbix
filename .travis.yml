@@ -1,14 +1,22 @@
 language: php
 php:
-- 5.3
-- 5.6
+  - 5.3
+  - 5.6
+
 env:
-- DB=mysql
-before_script:
-- if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS myapp;" -uroot; fi
+  - DB=mysql
+
+install:
+  - composer
 
 before_script: 
-- php /home/travis/build/casualuser/Qbix/MyApp/scripts/Q/configure.php
-- php /home/travis/build/casualuser/Qbix/MyApp/scripts/Q/install.php --all
+  - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS myapp;" -uroot; fi
+  - ln -s /home/travis/build/casualuser/Qbix/ /projects/qbix/Q/
+  - php /home/travis/build/casualuser/Qbix/MyApp/scripts/Q/configure.php
+  - php /home/travis/build/casualuser/Qbix/MyApp/scripts/Q/install.php --all
 
-script: phpunit -c /home/travis/build/casualuser/Qbix/platform/tests/q.phpunit.xml
+script: 
+  - phpunit -c /home/travis/build/casualuser/Qbix/platform/tests/q.phpunit.xml
+
+after_success:
+  -
