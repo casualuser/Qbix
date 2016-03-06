@@ -3,6 +3,8 @@ php:
   - 5.3
   - 5.6
 
+sudo: required
+
 env:
   - DB=mysql
 
@@ -11,7 +13,7 @@ install:
 
 before_script: 
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS myapp;" -uroot; fi
-  - mkdir -p /projects/qbix/Q 
+  - sudo mkdir -p /projects/qbix/Q
   - ln -s /home/travis/build/casualuser/Qbix /projects/qbix/Q
   - php /home/travis/build/casualuser/Qbix/MyApp/scripts/Q/configure.php
   - php /home/travis/build/casualuser/Qbix/MyApp/scripts/Q/install.php --all
