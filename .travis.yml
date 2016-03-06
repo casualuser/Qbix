@@ -8,8 +8,11 @@ sudo: required
 env:
   - DB=mysql
 
+before_install:
+  - sudo apt-get update > /dev/null
+
 install:
-  - composer
+  - sudo apt-get install -y --force-yes nodejs nodejs-legacy jq
 
 before_script: 
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS myapp;" -uroot; fi
@@ -18,9 +21,11 @@ before_script:
   - sudo chown -R travis:travis /projects/qbix/Q
   - ls -la /projects/qbix/Q/
   - php /projects/qbix/Q/MyApp/scripts/Q/configure.php MyApp
-
+  - jq 'del(.Q.localNotYetConfigured)' /projects/qbix/Q/MyApp/local/app.json | jq '.Q.web.controllerSuffix = ""'
 
   - php /projects/qbix/Q/MyApp/scripts/Q/install.php --all
+
+  - node --debug /projects/qbix/Q/MyApp/scripts/MyApp/MyApp.js
 
 script: 
   - phpunit -c /projects/qbix/Q/platform/tests/q.phpunit.xml
