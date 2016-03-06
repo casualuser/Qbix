@@ -16,6 +16,7 @@ before_script:
   - sudo mkdir -p /projects/qbix/Q
   - sudo ln -s /home/travis/build/casualuser/Qbix /projects/qbix/Q
   - sudo chown -R travis:travis /projects/qbix/Q
+  - ls -la /projects/qbix/Q/
   - php /projects/qbix/Q/MyApp/scripts/Q/configure.php
   - php /projects/qbix/Q/MyApp/scripts/Q/install.php --all
 
