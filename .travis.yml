@@ -17,7 +17,9 @@ before_script:
   - sudo cp -a /home/travis/build/casualuser/Qbix/. /projects/qbix/Q/
   - sudo chown -R travis:travis /projects/qbix/Q
   - ls -la /projects/qbix/Q/
-  - php /projects/qbix/Q/MyApp/scripts/Q/configure.php
+  - php /projects/qbix/Q/MyApp/scripts/Q/configure.php MyApp
+
+
   - php /projects/qbix/Q/MyApp/scripts/Q/install.php --all
 
 script: 
