@@ -22,13 +22,16 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 			Q_PLUGINS_DIR, 'Awards', 'classes', 'Composer', 'vendor', 'autoload.php'
 		)));
 
-		$options['authkey'] = Q_Config::expect('Awards', 'payments', 'stripe', 'secret');
+		$options['secret'] = Q_Config::expect('Awards', 'payments', 'stripe', 'secret');
+		$options['public'] = Q_Config::expect('Awards', 'payments', 'stripe', 'public');
 
-		$this->options = $options;
+		Q_Response::setScriptData('Q.Stripe', $options['public']);
 
 		\Stripe\Stripe::setApiKey(
-			$options['authkey']
+			$options['secret']
 		);
+
+		$this->options = $options;
 
 	}
 	
@@ -94,7 +97,7 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 				"source" => $token,
 				"description" => "Example customer")
 		);
-		
+
 		return $charge;
 	}
 
@@ -106,14 +109,7 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 			$options['authkey']
 		);
 
-		\Stripe\Token::create(array(
-			"card" => array(
-				"number" => "4242424242424242",
-				"exp_month" => 3,
-				"exp_year" => 2017,
-				"cvc" => "314"
-			)
-		));
+		return $token;
 	}
 
 	public $options = array();

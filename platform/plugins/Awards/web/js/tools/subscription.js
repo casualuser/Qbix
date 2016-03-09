@@ -47,25 +47,8 @@ Q.Tool.define("Awards/subscription", function (options) {
 },
 
 { // methods go here
-
-
+	
 });
-
-Q.Template.set(
-	'Awards/stripe',
-	'<div class="{{class}}">{{& title}}</div>'
-	+ '<form action="/charge" method="POST">'
-	+ '<script'
-	+ 'src="https://checkout.stripe.com/checkout.js" class="stripe-button"'
-	+ 'data-key="pk_test_jWgB7......."'
-	+ 'data-image="/img/documentation/checkout/marketplace.png"'
-	+ 'data-name="Demo Site"'
-	+ 'data-description="2 widgets"'
-	+ 'data-amount="2000"'
-	+ 'data-locale="auto">'
-	+ '</script>'
-	+ '</form>'
-);
 
 Q.addStylesheet('plugins/Awards/css/Awards.css');
 

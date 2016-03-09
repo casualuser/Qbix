@@ -80,18 +80,19 @@ Q.Awards = Q.plugins.Awards = {
 
 	});
 
-	Q.addScript("https://js.stripe.com/v2/", function () {
-		Stripe.setPublishableKey('pk_test_jWgB7eZtftCH1BCPpy46TQ4n');
-		console.log(Stripe.key);
-	});
-
 	Q.Tool.define({
 		"Awards/payment"           : "plugins/Awards/js/tools/payment.js"
 	});
 
 	Q.Tool.define({
-		"Awards/subscription"           : "plugins/Awards/js/tools/subscription.js"
+		"Awards/subscription"      : "plugins/Awards/js/tools/subscription.js"
 	});
+
+	Q.addScript("https://js.stripe.com/v2/", function () {
+		Stripe.setPublishableKey(Q.Stripe);
+	});
+
+	Q.onActivate();
 
 //	Streams.onMessage('Awards/credits', "").set(function (data) {
 //		Awards.amount = amount;
