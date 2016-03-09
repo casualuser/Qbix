@@ -74,6 +74,8 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 			if (!isset($_POST['stripeToken']))
 				throw new Exception("The Stripe Token was not generated correctly");
 
+			$token = $_POST['stripeToken'];
+
 			\Stripe\Charge::create(
 				array(
 					"amount" => 1000,
@@ -88,6 +90,11 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 			$error = $e->getMessage();
 		}
 
+		$customer = \Stripe\Customer::create(array(
+				"source" => $token,
+				"description" => "Example customer")
+		);
+		
 		return $charge;
 	}
 
