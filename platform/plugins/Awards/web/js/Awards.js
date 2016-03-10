@@ -89,10 +89,7 @@ Q.Awards = Q.plugins.Awards = {
 	});
 
 	Q.addScript("https://js.stripe.com/v2/", function () {
-		Stripe.setPublishableKey(Q.Stripe);
 	});
-
-	Q.onActivate();
 
 //	Streams.onMessage('Awards/credits', "").set(function (data) {
 //		Awards.amount = amount;

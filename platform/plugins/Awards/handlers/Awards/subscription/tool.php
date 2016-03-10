@@ -20,7 +20,7 @@ function Awards_subscription_tool($options)
     $token = $adapter->authToken();
 	$paymentButton = Q::ifset($options, 'paymentButton', 'Payment Info');
 	$subscribeButton = Q::ifset($options, 'subscribeButton', 'Start Subscription');
-    Q_Response::setToolOptions($options);
+    Q_Response::setToolOptions($adapter->options);
 	return Q::view("Awards/tool/subscription/$payments.php", compact(
 		'token', 'paymentButton', 'subscribeButton', 'planStreamName'
 	));

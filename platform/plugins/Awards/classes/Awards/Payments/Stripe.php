@@ -25,7 +25,7 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 		$options['secret'] = Q_Config::expect('Awards', 'payments', 'stripe', 'secret');
 		$options['public'] = Q_Config::expect('Awards', 'payments', 'stripe', 'public');
 
-		Q_Response::setScriptData('Q.Stripe', $options['public']);
+		Q_Response::setScriptData(Q.Stripe, $options['public']);
 
 		\Stripe\Stripe::setApiKey(
 			$options['secret']
@@ -69,10 +69,6 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 	{
 		$options = $this->options;
 
-		\Stripe\Stripe::setApiKey(
-			$options['authkey']
-		);
-
 		try {
 			if (!isset($_POST['stripeToken']))
 				throw new Exception("The Stripe Token was not generated correctly");
@@ -104,10 +100,6 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 	function authToken($customerId = null)
 	{
 		$options = $this->options;
-
-		\Stripe\Stripe::setApiKey(
-			$options['authkey']
-		);
 
 		return $token;
 	}
