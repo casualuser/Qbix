@@ -768,15 +768,17 @@ Elp.remainingWidth = function () {
 		return null;
 	}
 	var rect1 = this.getBoundingClientRect();
-	var w = this.parentNode.getBoundingClientRect().width;
+	var rect2 = this.parentNode.getBoundingClientRect();
+	var w = rect2.right - rect2.left;
 	Q.each(this.parentNode.children, function () {
 		if (this === element || !this.isVisible()) return;
 		var style = this.computedStyle();
-		var rect2 = this.getBoundingClientRect();
-		if (rect1.top > rect2.bottom || rect1.bottom < rect2.top) {
+		var rect3 = this.getBoundingClientRect();
+		if (rect1.top > rect3.bottom || rect1.bottom < rect3.top) {
 			return;
 		}
-		w -= rect2.width + parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+		w -= (rect3.right - rect3.left + 
+			parseFloat(style.marginLeft) + parseFloat(style.marginRight));
 	});	
 	return w;
 };
@@ -4690,6 +4692,11 @@ Q.Page.push = function (url) {
 	}
 	Q_hashChangeHandler.currentUrl = url.substr(Q.info.baseUrl.length + 1);
 	Q.info.url = url;
+};
+
+Q.Page.currentUrl = function () {
+	var url = location.hash.queryField('url');
+	return url ? Q.url(url) : location.href.split('#')[0];
 };
 
 Q.Page.beingLoaded = false;
