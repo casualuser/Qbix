@@ -77,7 +77,7 @@ class Awards_Payments_Stripe extends Awards_Payments implements iAwards_Payments
 		if (!$customer->retrieve()) {
 			Q_Valid::requireFields(array('token'), $options, true);
 			$sc = \Stripe\Customer::create(array(
-				"source" => $options['token']["id"],
+				"source" => $options['token']['id'],
 				"description" => $options['user']->displayName()
 			));
 			$customer->customerId = $sc->id;

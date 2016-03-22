@@ -23,6 +23,11 @@ function Awards_subscription_post($params = array())
 		Q_Valid::requireFields(array('token'), $req, true);
 		$token = $req['token'];
 	}
+	if ($req['payments'] === 'stripe') {
+		Q_Valid::requireFields(array('token'), $req, true);
+		$token = $req['token'];
+	}
+
 	$subscription = Awards::startSubscription($plan, $req['payments'], compact('token'));
 	Q_Response::setSlot('subscription', $subscription);
 }
