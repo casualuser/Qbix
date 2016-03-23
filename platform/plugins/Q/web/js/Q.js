@@ -10631,7 +10631,8 @@ Q.onJQuery.add(function ($) {
 		"Q/drawers": "plugins/Q/js/tools/drawers.js",
 		"Q/expandable": "plugins/Q/js/tools/expandable.js",
 		"Q/filter": "plugins/Q/js/tools/filter.js",
-		"Q/rating": "plugins/Q/js/tools/rating.js"
+		"Q/rating": "plugins/Q/js/tools/rating.js",
+		"Q/audio": "plugins/Q/js/tools/audio.js"		
 	});
 	
 	Q.Tool.jQuery({
