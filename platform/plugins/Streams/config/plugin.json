@@ -220,7 +220,14 @@
 				"defaults": {
 					"title": "Community Greeting"
 				}
-			}
+			},
+			"Streams/audio": {
+				"description": "audio file",
+				"create": true,
+				"defaults": {
+					"title": "New audio file"
+				}
+			},
 		},
 		"categorize": {
 			"relationTypes": ["Streams/interest"],
