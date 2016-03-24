@@ -1,0 +1,19 @@
+.Q_audio_start_record {
+    width: 64px;
+    height: 64px;
+    color: transparent;
+    border: medium none !important;
+    color: #000;
+    text-decoration: none;
+    background: url('../img/audio/record.png') 0 0 transparent;
+}
+
+.Q_audio_play_record {
+    width: 64px;
+    height: 64px;
+    color: transparent;
+    border: medium none !important;
+    color: #000;
+    text-decoration: none;
+    background: url('../img/audio/play.png') 0 0 transparent;
+}
