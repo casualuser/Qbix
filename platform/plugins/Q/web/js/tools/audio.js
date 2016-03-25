@@ -75,13 +75,13 @@ Q.Tool.define('Q/audio', function(options) {
 			this.classList.remove('Q_audio_play_pause');
 
 			tool.audio.audio.pause();
+
 		}
 
 		return false;
 	});
 
-	tool.$('#Q-audio-container').on('timeupdate', function() {
-		console.log(tool.audio.audio.currentTime);
+	$('#Q-audio-container audio').bind('timeupdate', function() {
 		tool.$('.Q_audio_progress').attr("value", tool.audio.audio.currentTime / tool.audio.audio.duration);
 	});
 
