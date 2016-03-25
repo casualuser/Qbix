@@ -1,4 +1,4 @@
-.Q_audio_start_record {
+.Q_audio_record_start {
     width: 64px;
     height: 64px;
     color: transparent;
@@ -8,7 +8,17 @@
     background: url('../img/audio/record.png') 0 0 transparent;
 }
 
-.Q_audio_play_record {
+.Q_audio_record_stop {
+    width: 64px;
+    height: 64px;
+    color: transparent;
+    border: medium none !important;
+    color: #000;
+    text-decoration: none;
+    background: url('../img/audio/stop.png') 0 0 transparent;
+}
+
+.Q_audio_play_start {
     width: 64px;
     height: 64px;
     color: transparent;
@@ -16,4 +26,14 @@
     color: #000;
     text-decoration: none;
     background: url('../img/audio/play.png') 0 0 transparent;
+}
+
+.Q_audio_play_pause {
+    width: 64px;
+    height: 64px;
+    color: transparent;
+    border: medium none !important;
+    color: #000;
+    text-decoration: none;
+    background: url('../img/audio/pause.png') 0 0 transparent;
 }

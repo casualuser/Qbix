@@ -40,8 +40,8 @@ Q.Tool.define('Q/audio', function(options) {
 	Q.Template.set(
 		'Q/audio/ui',
 '' //		audio.audio
-		+ '<button class="Q_audio_start_record"></button>'
-		+ '<button class="Q_audio_play_record"></button>'
+		+ '<button class="Q_audio_record_start"></button>'
+		+ '<button class="Q_audio_play_start"></button>'
 		+ '<progress id="seekbar" value="0" max="1" style="width:100%;"></progress>'
 	);
 
@@ -54,17 +54,27 @@ Q.Tool.define('Q/audio', function(options) {
 		}
 	);
 
-	$te.on([Q.Pointer.fastclick, '.Q_audio_start_record'], function (e) {
+	tool.$('.Q_audio_record_start').on(Q.Pointer.click, function (e) {
+		this.className = 'Q_audio_record_stop';
+
+		return false;
 	});
 
-	$te.on([Q.Pointer.fastclick, '.Q_audio_stop_record'], function (e) {
+	tool.$('.Q_audio_record_stop').on(Q.Pointer.click, function (e) {
+		this.className = 'Q_audio_record_start';
+
+		return false;
 	});
 
-	$te.on([Q.Pointer.fastclick, '.Q_audio_play_record'], function (e) {
+	tool.$('.Q_audio_play_start').on(Q.Pointer.click, function (e) {
+		console.log(this);
 		e.play();
+		return false;
 	});
 
-	$te.on([Q.Pointer.fastclick, '.Q_audio_pause_record'], function (e) {
+	tool.$('.Q_audio_play_pause').on(Q.Pointer.click, function (e) {
+
+		return false;
 	});
 
 /*
