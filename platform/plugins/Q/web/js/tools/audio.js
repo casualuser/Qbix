@@ -24,23 +24,23 @@ Q.Tool.define('Q/audio', function(options) {
 
 	Q.addStylesheet('plugins/Q/css/audio.css');
 
-	var audioObj = Q.audio(
+	Q.audio(
 		"http://tonycuffe.com/mp3/tailtoddle_lo.mp3",
 		function(){ console.log('loaded it successfully') }
 	);
 
-// div#Q-audio-container
+	var au = Q.Audio.collection[Object.keys(Q.Audio.collection)[0]];
 
-	var audioRaw = new Q.Audio("http://tonycuffe.com/mp3/tailtoddle_lo.mp3");
+	var position = au.currentTime;
 
-	var fields = { audio: audioRaw.audio };
+	var fields = {position: position};
 
 	Q.Template.set(
 		'Q/audio/ui',
-'' //		audio.audio
-		+ '<button class="Q_audio_record Q_audio_record_start"></button>'
+		'<button class="Q_audio_record Q_audio_record_start"></button>'
 		+ '<button class="Q_audio_play Q_audio_play_start"></button>'
 		+ '<progress id="seekbar" value="0" max="1" style="width:100%;"></progress>'
+		+ '<div class="Q_audio_time"></div>'
 	);
 
 	Q.Template.render(
@@ -48,7 +48,6 @@ Q.Tool.define('Q/audio', function(options) {
 		fields,
 		function (err, html) {
 			$te.append(html);
-			$te.append(audio);
 		}
 	);
 
@@ -70,9 +69,14 @@ Q.Tool.define('Q/audio', function(options) {
 		if (this.classList.contains('Q_audio_play_start')) {
 			this.classList.add('Q_audio_play_pause');
 			this.classList.remove('Q_audio_play_start');
+
+			au.audio.play();
+
 		} else {
 			this.classList.add('Q_audio_play_start');
 			this.classList.remove('Q_audio_play_pause');
+
+			au.audio.pause();
 		}
 
 		return false;
