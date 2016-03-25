@@ -29,17 +29,15 @@ Q.Tool.define('Q/audio', function(options) {
 		function(){ console.log('loaded it successfully') }
 	);
 
-	var au = Q.Audio.collection[Object.keys(Q.Audio.collection)[0]];
+	tool.audio = Q.Audio.collection[Object.keys(Q.Audio.collection)[0]];
 
-	var position = au.currentTime;
-
-	var fields = {position: position};
+	var fields = {};
 
 	Q.Template.set(
 		'Q/audio/ui',
 		'<button class="Q_audio_record Q_audio_record_start"></button>'
 		+ '<button class="Q_audio_play Q_audio_play_start"></button>'
-		+ '<progress id="seekbar" value="0" max="1" style="width:100%;"></progress>'
+		+ '<progress class="Q_audio_progress" value="0" max="1"></progress>'
 		+ '<div class="Q_audio_time"></div>'
 	);
 
@@ -70,31 +68,22 @@ Q.Tool.define('Q/audio', function(options) {
 			this.classList.add('Q_audio_play_pause');
 			this.classList.remove('Q_audio_play_start');
 
-			au.audio.play();
+			tool.audio.audio.play();
 
 		} else {
 			this.classList.add('Q_audio_play_start');
 			this.classList.remove('Q_audio_play_pause');
 
-			au.audio.pause();
+			tool.audio.audio.pause();
 		}
 
 		return false;
 	});
 
-/*
-	$('#play').on('click', function() {
-		document.getElementById('player').play();
+	tool.$('#Q-audio-container').on('timeupdate', function() {
+		console.log(tool.audio.audio.currentTime);
+		tool.$('.Q_audio_progress').attr("value", tool.audio.audio.currentTime / tool.audio.audio.duration);
 	});
-
-	$('#pause').on('click', function() {
-		document.getElementById('player').pause();
-	});
-
-	$('#player').on('timeupdate', function() {
-		$('#seekbar').attr("value", this.currentTime / this.duration);
-	});
-*/
 
 },
 
