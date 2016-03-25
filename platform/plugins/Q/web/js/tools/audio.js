@@ -24,24 +24,22 @@ Q.Tool.define('Q/audio', function(options) {
 
 	Q.addStylesheet('plugins/Q/css/audio.css');
 
-/*
-	var audio = Q.audio(
+	var audioObj = Q.audio(
 		"http://tonycuffe.com/mp3/tailtoddle_lo.mp3",
 		function(){ console.log('loaded it successfully') }
 	);
-*/
 
 // div#Q-audio-container
 
-	var audio = new Q.Audio("http://tonycuffe.com/mp3/tailtoddle_lo.mp3");
+	var audioRaw = new Q.Audio("http://tonycuffe.com/mp3/tailtoddle_lo.mp3");
 
-	var fields = { audio: audio.audio };
+	var fields = { audio: audioRaw.audio };
 
 	Q.Template.set(
 		'Q/audio/ui',
 '' //		audio.audio
-		+ '<button class="Q_audio_record_start"></button>'
-		+ '<button class="Q_audio_play_start"></button>'
+		+ '<button class="Q_audio_record Q_audio_record_start"></button>'
+		+ '<button class="Q_audio_play Q_audio_play_start"></button>'
 		+ '<progress id="seekbar" value="0" max="1" style="width:100%;"></progress>'
 	);
 
@@ -54,25 +52,28 @@ Q.Tool.define('Q/audio', function(options) {
 		}
 	);
 
-	tool.$('.Q_audio_record_start').on(Q.Pointer.click, function (e) {
-		this.className = 'Q_audio_record_stop';
+	tool.$('.Q_audio_record').on(Q.Pointer.click, function (e) {
+
+		if (this.classList.contains('Q_audio_record_start')) {
+			this.classList.add('Q_audio_record_stop');
+			this.classList.remove('Q_audio_record_start');
+		} else {
+			this.classList.add('Q_audio_record_start');
+			this.classList.remove('Q_audio_record_stop');
+		}
 
 		return false;
 	});
 
-	tool.$('.Q_audio_record_stop').on(Q.Pointer.click, function (e) {
-		this.className = 'Q_audio_record_start';
+	tool.$('.Q_audio_play').on(Q.Pointer.click, function (e) {
 
-		return false;
-	});
-
-	tool.$('.Q_audio_play_start').on(Q.Pointer.click, function (e) {
-		console.log(this);
-		e.play();
-		return false;
-	});
-
-	tool.$('.Q_audio_play_pause').on(Q.Pointer.click, function (e) {
+		if (this.classList.contains('Q_audio_play_start')) {
+			this.classList.add('Q_audio_play_pause');
+			this.classList.remove('Q_audio_play_start');
+		} else {
+			this.classList.add('Q_audio_play_start');
+			this.classList.remove('Q_audio_play_pause');
+		}
 
 		return false;
 	});
