@@ -26,7 +26,10 @@ Q.Tool.define('Q/audio', function(options) {
 
 	Q.audio(
 		"http://tonycuffe.com/mp3/tailtoddle_lo.mp3",
-		function(){ console.log('loaded it successfully') }
+		function(){
+			tool.$('.Q_audio_time').html('00:00');
+			console.log('loaded it successfully')
+		}
 	);
 
 	tool.audio = Q.Audio.collection[Object.keys(Q.Audio.collection)[0]];
@@ -35,10 +38,11 @@ Q.Tool.define('Q/audio', function(options) {
 
 	Q.Template.set(
 		'Q/audio/ui',
-		'<button class="Q_audio_record Q_audio_record_start"></button>'
-		+ '<button class="Q_audio_play Q_audio_play_start"></button>'
-		+ '<progress class="Q_audio_progress" value="0" max="1"></progress>'
-		+ '<div class="Q_audio_time"></div>'
+
+		'<div style="display: inline-block;"><span><button class="Q_audio_record Q_audio_record_start"></button></span>'
+		+ '<span><button class="Q_audio_play Q_audio_play_start"></button></span>'
+		+ '<span><progress class="Q_audio_progress" value="0" max="1"></progress></span>'
+		+ '<span><div class="Q_audio_time"></div></span></div>'
 	);
 
 	Q.Template.render(
@@ -83,8 +87,18 @@ Q.Tool.define('Q/audio', function(options) {
 
 	$('#Q-audio-container audio').bind('timeupdate', function() {
 		tool.$('.Q_audio_progress').attr("value", tool.audio.audio.currentTime / tool.audio.audio.duration);
+		var position = Math.floor(tool.audio.audio.currentTime).toString();
+		tool.$('.Q_audio_time').html(formatSecondsAsTime(position));
 	});
 
+	function formatSecondsAsTime(secs, format) {
+		var hr  = Math.floor(secs / 3600);
+		var min = Math.floor((secs - (hr * 3600))/60);
+		var sec = Math.floor(secs - (hr * 3600) -  (min * 60));
+		if (min < 10){min = "0" + min}
+		if (sec < 10){sec  = "0" + sec}
+		return min + ':' + sec;
+	};
 },
 
 {
