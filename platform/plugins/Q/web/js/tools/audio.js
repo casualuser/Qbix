@@ -32,7 +32,7 @@ Q.Tool.define('Q/audio', function(options) {
 		}
 	);
 
-	tool.audio = Q.Audio.collection[Object.keys(Q.Audio.collection)[0]];
+	tool.media = Q.Audio.collection[Object.keys(Q.Audio.collection)[0]].audio;
 
 	var fields = {};
 
@@ -55,12 +55,19 @@ Q.Tool.define('Q/audio', function(options) {
 
 	tool.$('.Q_audio_record').on(Q.Pointer.click, function (e) {
 
-		if (this.classList.contains('Q_audio_record_start')) {
-			this.classList.add('Q_audio_record_stop');
-			this.classList.remove('Q_audio_record_start');
+		tool.record = this;
+
+		if (tool.record.classList.contains('Q_audio_record_start')) {
+			tool.record.classList.add('Q_audio_record_stop');
+			tool.record.classList.remove('Q_audio_record_start');
+
+			tool.record.uploadRecord();
+
 		} else {
-			this.classList.add('Q_audio_record_start');
-			this.classList.remove('Q_audio_record_stop');
+			tool.record.classList.add('Q_audio_record_start');
+			tool.record.classList.remove('Q_audio_record_stop');
+
+			tool.record.startRecord();
 		}
 
 		return false;
@@ -68,17 +75,19 @@ Q.Tool.define('Q/audio', function(options) {
 
 	tool.$('.Q_audio_play').on(Q.Pointer.click, function (e) {
 
-		if (this.classList.contains('Q_audio_play_start')) {
-			this.classList.add('Q_audio_play_pause');
-			this.classList.remove('Q_audio_play_start');
+		tool.play = this;
 
-			tool.audio.audio.play();
+		if (tool.play.classList.contains('Q_audio_play_start')) {
+			tool.play.classList.add('Q_audio_play_pause');
+			tool.play.classList.remove('Q_audio_play_start');
+
+			tool.media.play();
 
 		} else {
-			this.classList.add('Q_audio_play_start');
-			this.classList.remove('Q_audio_play_pause');
+			tool.play.classList.add('Q_audio_play_start');
+			tool.play.classList.remove('Q_audio_play_pause');
 
-			tool.audio.audio.pause();
+			tool.media.pause();
 
 		}
 
@@ -86,9 +95,14 @@ Q.Tool.define('Q/audio', function(options) {
 	});
 
 	$('#Q-audio-container audio').bind('timeupdate', function() {
-		tool.$('.Q_audio_progress').attr("value", tool.audio.audio.currentTime / tool.audio.audio.duration);
-		var position = Math.floor(tool.audio.audio.currentTime).toString();
+		tool.$('.Q_audio_progress').attr("value", tool.media.currentTime / tool.media.duration);
+		var position = Math.floor(tool.media.currentTime).toString();
 		tool.$('.Q_audio_time').html(formatSecondsAsTime(position));
+	});
+
+	$('#Q-audio-container audio').bind('ended', function() {
+		tool.play.classList.add('Q_audio_play_start');
+		tool.play.classList.remove('Q_audio_play_pause');
 	});
 
 	function formatSecondsAsTime(secs, format) {
