@@ -23,13 +23,13 @@ Q.Tool.define('Q/audio', function(options) {
 	var $te = $(tool.element);
 
 	Q.audio(
-		"http://tonycuffe.com/mp3/tailtoddle_lo.mp3",
+		"http://cs6-12v4.vk-cdn.net/p15/50157cb425f55c.mp3",
 		function(){
 			tool.$('.Q_audio_time').html('00:00');
 		}
 	);
 
-	tool.media = Q.Audio.collection[Object.keys(Q.Audio.collection)[0]].audio;
+	tool.media = Q.first(Q.Audio.collection).audio;
 
 	var fields = {};
 
