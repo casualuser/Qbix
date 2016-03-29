@@ -14,7 +14,7 @@
 function Q_audio_tool($options)
 {
     Q_Response::setToolOptions($options);
-    $class = 'Q_audio_ui';
+    Q_Response::addStylesheet('plugins/Q/css/audio.css');
 
     return '';
 }
