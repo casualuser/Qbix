@@ -22,15 +22,6 @@ Q.Tool.define('Q/audio', function(options) {
 	var state = tool.state;
 	var $te = $(tool.element);
 
-	Q.audio(
-		"http://cs6-12v4.vk-cdn.net/p15/50157cb425f55c.mp3",
-		function(){
-			tool.$('.Q_audio_time').html('00:00');
-		}
-	);
-
-	tool.media = Q.first(Q.Audio.collection).audio;
-
 	var fields = {};
 
 	Q.Template.render(
@@ -40,6 +31,15 @@ Q.Tool.define('Q/audio', function(options) {
 			$te.append(html);
 		}
 	);
+
+	Q.audio(
+		"http://cs6-12v4.vk-cdn.net/p15/50157cb425f55c.mp3",
+		function(){
+			tool.$('.Q_audio_time').html('00:00');
+		}
+	);
+
+	tool.media = Q.first(Q.Audio.collection).audio;
 
 	tool.$('.Q_audio_record').on(Q.Pointer.click, tool, function (e) {
 
