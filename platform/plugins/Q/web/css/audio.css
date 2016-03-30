@@ -1,3 +1,9 @@
+button,
+button:active,
+button:focus {
+    outline: none;
+}
+
 .Q_audio_record_start {
     width: 64px;
     height: 64px;
