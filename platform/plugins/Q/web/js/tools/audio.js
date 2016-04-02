@@ -33,7 +33,7 @@ Q.Tool.define('Q/audio', function(options) {
 	);
 
 	Q.audio(
-		"http://cs6-12v4.vk-cdn.net/p15/50157cb425f55c.mp3",
+		"http://www.televisiontunes.com/uploads/audio/Adventure%20Time%20-%20Jake%20-%20On%20a%20Tropical%20Island.mp3",
 		function(){
 			tool.$('.Q_audio_time').html('00:00');
 		}

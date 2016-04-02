@@ -224,10 +224,11 @@
 			"Streams/audio": {
 				"description": "audio file",
 				"create": true,
+				"edit": true,
 				"defaults": {
 					"title": "New audio file"
 				}
-			},
+			}
 		},
 		"categorize": {
 			"relationTypes": ["Streams/interest"],
