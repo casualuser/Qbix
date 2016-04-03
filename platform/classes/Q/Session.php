@@ -271,7 +271,7 @@ class Q_Session
 						self::$session_db_row = $row;
 					} else {
 						// Start a new session with our own id
-						$row->$id_field = self::generateId();
+						$id = $row->$id_field = self::generateId();
 						$row->$data_field = "";
 						$row->$updated_field = date('Y-m-d H:i:s');
 						$row->$duration_field = Q_Config::get(
@@ -294,9 +294,8 @@ class Q_Session
 							self::$session_db_row = $row;
 						}
 					}
-				} else {
-					self::id($id);
 				}
+				self::id($id);
 			}
 			if (!empty($_SERVER['HTTP_HOST'])) {
 				$durationName = self::durationName();
@@ -305,6 +304,8 @@ class Q_Session
 			} else if (empty($_SESSION)) {
 				$_SESSION = array();
 			}
+			ini_set('session.use_cookies', 0); // we are gonna handle the cookies, thanks
+			session_cache_limiter(''); // don't send the cache limiter headers either
 			session_start();
 		} catch (Exception $e) {
 			$app = Q_Config::get('Q', 'app', null);

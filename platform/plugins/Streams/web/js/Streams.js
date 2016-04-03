@@ -2689,7 +2689,7 @@ Message.latestOrdinal = function _Message_latestOrdinal (publisherId, streamName
  * @param {Object} [options] A hash of options which can include:
  *   @param {Number} [options.max=5] The maximum number of messages to wait and hope they will arrive via sockets. Any more and we just request them again.
  *   @param {Number} [options.timeout=1000] The maximum amount of time to wait and hope the messages will arrive via sockets. After this we just request them again.
- *   @param {Number} [options.unlessSocket=true] Whether to avoid doing any requests when a socket is attached
+ *   @param {Number} [options.unlessSocket=true] Whether to avoid doing any requests when a socket is attached and user is a participant in the stream
  *   @param {Boolean} [options.evenIfNotRetained] Set this to true to fetch all messages posted to the stream, in the event that it wasn't cached or retained.
  * @return {Boolean|Number|Q.Pipe}
  *   Returns false if no attempt was made because stream wasn't cached,
@@ -2716,7 +2716,17 @@ Message.wait = function _Message_wait (publisherId, streamName, ordinal, callbac
 	});
 	var socket = Q.Socket.get('Streams', node);
 	if (!socket || ordinal < 0 || ordinal - o.max > latest) {
-		return (socket && o.unlessSocket) ? false : _tryLoading();
+		if (o.unlessSocket) {
+			var participant;
+			Streams.get.cache.each([publisherId, streamName], function (key, info) {
+				var p = info.subject.participant;
+				if (p && p.state === 'participating') {
+					participant = p;
+					return false;
+				}
+			});
+		}
+		return (o.unlessSocket && socket && participant) ? false : _tryLoading();
 	}
 	// ok, wait a little while
 	var t = setTimeout(_tryLoading, o.timeout);
