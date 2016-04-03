@@ -24,6 +24,8 @@ Q.Tool.define('Q/audio', function(options) {
 
 	var fields = {};
 
+	var audiofile = "http://www.televisiontunes.com/uploads/audio/Adventure%20Time%20-%20Jake%20-%20On%20a%20Tropical%20Island.mp3";
+
 	Q.Template.render(
 		'Q/audio/ui',
 		fields,
@@ -32,8 +34,16 @@ Q.Tool.define('Q/audio', function(options) {
 		}
 	);
 
+//	tool.record.uploadRecord =
+
+	function uploadRecord(audio) {
+
+		console.log('upload audio to stream here via post handler');
+
+	};
+
 	Q.audio(
-		"http://www.televisiontunes.com/uploads/audio/Adventure%20Time%20-%20Jake%20-%20On%20a%20Tropical%20Island.mp3",
+		audiofile,
 		function(){
 			tool.$('.Q_audio_time').html('00:00');
 		}
@@ -49,7 +59,9 @@ Q.Tool.define('Q/audio', function(options) {
 			tool.record.addClass('Q_audio_record_stop');
 			tool.record.removeClass('Q_audio_record_start');
 
-			tool.record.uploadRecord();
+			uploadRecord(audiofile);
+
+			//tool.record.uploadRecord();
 
 		} else {
 			tool.record.addClass('Q_audio_record_start');
