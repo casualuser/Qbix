@@ -7887,7 +7887,7 @@ Q.Template.load = Q.getter(function _Q_Template_load(name, callback, options) {
 	
 	// check if template is cached
 	var n = Q.normalize(name);
-	if (tpl && tpl[n]) {
+	if (tpl && typeof tpl[n] === 'string') {
 		var result = tpl[n];
 		callback(null, result);
 		return true;
@@ -10045,22 +10045,22 @@ Q.Dialogs = {
 			dontTriggerClose = false;
 		}
 		
-		var dialog = this.dialogs.pop();
+		var $dialog = this.dialogs.pop();
 		if (this.dialogs.length) {
 			this.dialogs[this.dialogs.length - 1].show();
 		}
-		if (!dontTriggerClose && dialog) {
+		if (!dontTriggerClose && $dialog) {
 			Q.Dialogs.dontPopOnClose = true;
-			if (dialog.data('Q/overlay')) {
-				dialog.data('Q/overlay').close();
-			} else if (dialog.data('Q/dialog')) {
-				dialog.data('Q/dialog').close();
+			if ($dialog.data('Q/overlay')) {
+				$dialog.data('Q/overlay').close();
+			} else if ($dialog.data('Q/dialog')) {
+				$dialog.data('Q/dialog').close();
 			}
 		}
 		if (!this.dialogs.length) {
 			Q.Masks.hide('Q.screen.mask');
 		}
-		return dialog;
+		return $dialog;
 	}
 
 };
@@ -10190,7 +10190,7 @@ Q.confirm.options = {
 Q.prompt = function(message, callback, options) {
 	function _done() {
 		buttonClicked = true;
-		var value = dialog.find('input').val();
+		var value = $dialog.find('input').val();
 		Q.Dialogs.pop();
 		Q.handle(callback, this, [value]);
 	}
