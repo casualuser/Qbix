@@ -49,17 +49,7 @@
 				var $form = $te.find('form').detach();
 				var $img = $te.find('img.Streams_preview_add').detach();
 				$te.empty().append($img, $form).addClass('Q_uploading');
-
-				var e = Q.Tool.setUpElement(
-					"div", // or pass an existing element
-					"Q/audio",
-					[] //options
-				);
-				$te.append(e).activate();
-
 			};
-
-
 		},
 
 		{
@@ -168,6 +158,14 @@
 					tool.preview.create(event);
 					form.reset();
 				});
+				$('.Streams_audio_preview_tool').append(
+					Q.Tool.setUpElement(
+						"div", // or pass an existing element
+						"Q/audio",
+						[], //options
+						'attachedAudio'
+					)
+				).activate();
 			}
 		}
 
