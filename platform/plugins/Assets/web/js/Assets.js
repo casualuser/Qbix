@@ -380,6 +380,8 @@ Assets.Payments.stripe.options = {
 	name: Users.communityName
 };
 
+// amazon tool
+Q.Tool.define("Assets/amazon", "plugins/Assets/js/tools/amazon.js");
 Q.Tool.define({
 	"Assets/subscription": "plugins/Assets/js/tools/subscription.js",
 	"Assets/payment": "plugins/Assets/js/tools/payment.js"

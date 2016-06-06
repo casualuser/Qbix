@@ -1,0 +1,13 @@
+CREATE TABLE IF NOT EXISTS `{$prefix}amazon` (
+  `_id` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+  `locale` varchar(16) CHARACTER SET utf8 DEFAULT NULL,
+  `insertedTime` datetime NOT NULL,
+  `updatedTime` datetime DEFAULT NULL,
+  `ASIN` varchar(256) COLLATE utf8_bin NOT NULL,
+  `pic` varchar(2048) COLLATE utf8_bin NOT NULL,
+  `input` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
+  `title` varchar(2048) COLLATE utf8_bin NOT NULL,
+  `desc` varchar(2048) COLLATE utf8_bin NOT NULL,
+  `price` varchar(2048) COLLATE utf8_bin NOT NULL,
+  `wish` varchar(256) CHARACTER SET utf8 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

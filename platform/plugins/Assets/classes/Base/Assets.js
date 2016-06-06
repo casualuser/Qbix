@@ -27,6 +27,7 @@ module.exports = Base;
  * @type array
  */
 Base.tableClasses = [
+	"Assets_Amazon",
 	"Assets_Badge",
 	"Assets_Charge",
 	"Assets_Customer",
@@ -52,6 +53,13 @@ Base.db = function () {
 Base.connectionName = function() {
 	return 'Assets';
 };
+
+/**
+ * Link to Assets.Amazon model
+ * @property Amazon
+ * @type Assets.Amazon
+ */
+Base.Amazon = Q.require('Assets/Amazon');
 
 /**
  * Link to Assets.Badge model
