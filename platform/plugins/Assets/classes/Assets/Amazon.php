@@ -180,20 +180,18 @@ class Assets_Amazon extends Base_Assets_Amazon
 			$searchIndex = 'All';
 			$version = "2013-08-01"; // "2011-08-01";
 
-			$params = array();
-
-			$params["AWSAccessKeyId"] = $accessKeyID;
-			$params["AssociateTag"] = $associateTag;
-			$params["Availability"] = "Available";
-			$params["Keywords"] = $keywords;
-			$params["Operation"] = $operation;
-			$params["ResponseGroup"] = $responseGroup;
-			$params["SearchIndex"] = $searchIndex;
-			$params["Service"] = "AWSECommerceService";
-			$params["Timestamp"] = gmdate('Y-m-d\TH:i:s\Z');
-			//  date("Y-m-d\TH:i:s\Z", new DateTime());
-			//	date('Y-m-d\\TH:i:s\\Z', $datetimeNext)
-			// "2015-08-18T12:00:00Z" // [YYYY-MM-DDThh:mm:ssZ]
+			$params = array(
+				"AWSAccessKeyId" => $accessKeyID,
+				"AssociateTag" => $associateTag,
+				"Availability" => "Available",
+				"Keywords" => $keywords,
+				"Operation" => $operation,
+				"ResponseGroup" => $responseGroup,
+				"SearchIndex" => $searchIndex,
+				"Service" => "AWSECommerceService",
+				"Timestamp" => gmdate('Y-m-d\TH:i:s\Z'),
+				"Version" => $version
+			);
 
 			$params["Version"] = $version;
 

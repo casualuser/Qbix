@@ -13,8 +13,8 @@
 		},
 		"pluginInfo": {
 			"Assets": {
-				"version": "0.7",
-				"compatible": "0.7",
+				"version": "0.8",
+				"compatible": "0.8",
 				"requires": {"Q": "0.9", "Streams": "0.9"},
 				"connections": ["Assets"]
 			}
