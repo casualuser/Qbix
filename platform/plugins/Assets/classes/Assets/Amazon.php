@@ -52,26 +52,7 @@ class Assets_Amazon extends Base_Assets_Amazon
 
 			$host = explode("/", $results[$key]['DetailPageURL'])[2];
 
-			// TODO: convert this into separate function
-
-					$tld = explode(".", $host); array_shift($tld); array_shift($tld);
-
-					$tld_d = explode(".", $host);
-					$tld_r= array_slice($tld, 2, NULL, true);
-
-					// echo ($tld);
-					// echo ($tld_r);
-
-					foreach ($hosts as $k=>$v) {
-						$h = explode(".", $v); array_shift($h); array_shift($h);
-						if ( $h == $tld ) {$locale = $k;}
-					}
-
-					if ( $locale == 'UK' ) {$locale = 'GB';}
-
-			// TODO: convert this into separate function
-
-			$resultsClientRenderArray[$key]['locale'] = $locale;
+			$resultsClientRenderArray[$key]['locale'] = Assets_Amazon::localeLookup($host, $hosts);
 
 			if ( isset ($results[$key]['EditorialReviews'])) {
 				$resultsClientRenderArray[$key]['desc'] = ''; //$resultsClientRenderArray[$key]['desc'] = $results[$key]['EditorialReviews']['EditorialReview']['Content'];
@@ -97,6 +78,25 @@ class Assets_Amazon extends Base_Assets_Amazon
         return $resultsClientRenderArray;
 
     }
+
+	static function localeLookup($host, $hosts) {
+
+		// set 'US' locale as default
+		// $locale = 'US';
+
+		$tld = explode(".", $host); array_shift($tld); array_shift($tld);
+		$tld_d = explode(".", $host);
+		$tld_r = array_slice($tld, 2, NULL, true);
+
+		foreach ($hosts as $k=>$v) {
+			$h = explode(".", $v); array_shift($h); array_shift($h);
+			if ( $h == $tld ) {$locale = $k;}
+		}
+
+		if ( $locale == 'UK' ) {$locale = 'GB';}
+
+		return $locale;
+	}
 
 	/**
 	 * Get autocomplete results
@@ -192,8 +192,6 @@ class Assets_Amazon extends Base_Assets_Amazon
 				"Timestamp" => gmdate('Y-m-d\TH:i:s\Z'),
 				"Version" => $version
 			);
-
-			$params["Version"] = $version;
 
 			// sort the parameters
 			ksort($params);
