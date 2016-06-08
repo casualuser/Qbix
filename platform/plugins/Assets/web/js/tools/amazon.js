@@ -35,7 +35,6 @@ Q.Tool.define("Assets/amazon", function(options) {
   this.refresh();
   this.draw();
 
-  console.log('constructor completed');
 },
 
 { // DEFAULT OPTIONS
@@ -78,16 +77,6 @@ Q.Tool.define("Assets/amazon", function(options) {
 
     $items = tool.$('[data-assets-amazon], .Assets_amazon_tool');
 
-/*
-    query = '';
-
-    Q.req("Assets/amazon", 'results', callback, {
-        fields: {
-            input: query
-        }
-    });
-*/
-
     Q.Template.render(
         'Assets/amazon/response/wishlist',
         $items,
@@ -119,41 +108,34 @@ Q.Tool.define("Assets/amazon", function(options) {
 
                               var latest = Q.latest(this);
 
-                              // console.log(latest);
-                              // console.log(this);
-                              // console.log(tool);
+                              Q.req("Assets/amazon", 'results', 
+                                function (err, response) {
 
-                              // In onFilter event, if the query is '' then set this innerHTML and activate it with Q.activate() or $foo.html(html).activate()
+                                  var msg = Q.firstErrorMessage(err, response && response.errors);
+                                  if (msg) {
+                                      return console.warn(msg);
+                                  }
 
-                              _getResults(
-                                  query,
-                                  function ($content) {
-                                      if (Q.latest(this, latest)) {
-                                          $(element).empty().append($content);
-                                      }
-                                  },
-                                  function (err, response) {
+                                  var results = response.slots.results;
+                                  var fields = {results: ''};
+                                  if (results) {
+                                      fields = {results: results};
+                                  }
 
-                                      var msg = Q.firstErrorMessage(err, response && response.errors);
-                                      if (msg) {
-                                          return console.warn(msg);
-                                      }
-
-                                      var results = response.slots.results;
-                                      var fields = {results: ''};
-                                      if (results) {
-                                          fields = {results: results};
-                                      }
-
-                                      Q.Template.render(
-                                          'Assets/amazon/response/results',
-                                          fields,
-                                          function (err, html) {
-                                              $(element).html(html);
-                                          }
-                                      );
+                                  Q.Template.render(
+                                      'Assets/amazon/response/results',
+                                      fields,
+                                      function (err, html) {
+                                          $(element).html(html);
                                       }
                                   );
+                                },
+                                {
+                                  fields: {
+                                      input: query
+                                  }
+                              });
+
                           }, tool);
                 });
 
@@ -179,16 +161,8 @@ Q.Tool.define("Assets/amazon", function(options) {
 //          tool.onRefresh.handle.call(tool);    
           // also see tool.rendering()
         });
-
-
-
       }
     );
-  },
-  
-  // another example method:
-  abcScroll: function (x, y) {
-    tool.$abc.scrollTo(x, y);
   },
   
   // optional methods for your tool
@@ -221,11 +195,6 @@ Q.Tool.define("Assets/amazon", function(options) {
 
 );
 
-Q.Template.set('Assets/amazon',
-  '<img src="{{& src}}" alt="{{alt}}">'
-  + '<div class="{{class}}">{{& title}}</div>'
-);
-
 Q.Template.set('Assets/amazon/response/wishlist', 
     '<div class="Assets_amazon_image">'
     + '</div>'    
@@ -238,17 +207,12 @@ Q.Template.set('Assets/amazon/response/results',
     + '<ul>'
     + '{{#each results}}'
     + '<li class="Wishes_amazon_results_item" data-index={{@index}} data-asin={{ASIN}}>'
-//    + '<button class="Wishes_amazon_results_wish">wish!</button>'
     + '<img class="Wishes_amazon_results_image" src="{{pic}}" alt="{{alt}}">'
     + '<div>'
     + '<span class="Wishes_amazon_results_title"><h3>{{title}}</h3></span>'
-//    + '<br>'
     + '<span class="Wishes_amazon_results_price">{{price}}</span>'
     + '</div>'
     + '<br>'
-//        + '<span class="Wishes_amazon_results_desc">{{desc}}</span>'
-//        + '<br>'
-//        + '<div>{{ASIN}}</div>'
     + '</li>'
     + '{{/each}}'
     + '</ul>'
