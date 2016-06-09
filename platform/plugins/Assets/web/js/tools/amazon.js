@@ -31,14 +31,18 @@ Q.Tool.define("Assets/amazon", function(options) {
   var state = tool.state;
   var $te = $(tool.element);
 
-  // draw the tool, see method below
-  this.refresh();
+  // draw the tool
+  tool.refresh();
 
-  $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', function (evt) {
+  console.log(state);
 
-      console.log('results written');
+  $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', tool, function () {
 
-      tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'));
+      Q.Streams.get(state.publisherId, state.streamName, function () {
+        console.log(this.fields);
+      });
+
+      tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'), 'Q/filter');
       return tool.filter.end();
   });
 },
@@ -94,7 +98,7 @@ Q.Tool.define("Assets/amazon", function(options) {
                         state.onFilter.set(
                           function (query, element) {
 
-                              var latest = Q.latest(this);
+                              var latest = Q.latest(tool);
 
                               Q.req("Assets/amazon", 'results', 
                                 function (err, response) {
