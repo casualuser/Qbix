@@ -33,8 +33,12 @@ Q.Tool.define("Assets/amazon", function(options) {
   
   // draw the tool, see method below
   this.refresh();
-  this.draw();
 
+  $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', function (evt) {
+      console.log('results written');
+      toggleResult = tool.$('.Q_filter_tool').end();
+      return toggleResult;
+  });
 },
 
 { // DEFAULT OPTIONS
@@ -42,23 +46,6 @@ Q.Tool.define("Assets/amazon", function(options) {
   publisherId: null,
   streamName: null,
 
-  editable: false,
-  imagepicker: {
-    showSize: "x200",
-    fullSize: "x"
-  },
-  showFile: null,
-  throbber: "plugins/Q/img/throbbers/bars32.gif",
-  templates: {
-    view: {
-      name: 'Assets/amazon/response/results',
-      fields: { 
-        alt: 'image', 
-        titleClass: '', 
-        titleTag: 'h2'
-      }
-    }
-  },
   onChoose: new Q.Event(),  
   onSelect: new Q.Event(),
   onFilter: new Q.Event(),  
@@ -69,8 +56,7 @@ Q.Tool.define("Assets/amazon", function(options) {
 
 { // YOUR TOOL'S METHODS
 
-  
-  draw: function (callback) {
+  refresh: function (callback) {
     var tool = this;
     var state = tool.state;
     var $te = $(tool.element);
@@ -142,29 +128,31 @@ Q.Tool.define("Assets/amazon", function(options) {
             $te.append(html);
             });
   },
-
-  refresh: function (callback) {
+/*
+  end: function () {
     var tool = this;
     var state = tool.state;
-    // code to refresh the whole tool
-    // then e.g. trigger an event
-
-    Q.Template.render(
-      state.templates.view.name,
-      function (err, html) {
-        tool.element.innerHTML = html;
-        Q.activate(tool.element,
-        function () {
-          // save some references for later
-          tool.$abc = tool.$('.First_abc');
-          // trigger event for others to hook
-//          tool.onRefresh.handle.call(tool);    
-          // also see tool.rendering()
-        });
-      }
-    );
+    if (!state.begun || tool.suspended) return;
+    state.begun = false;
+    var $te = $(tool.element);
+    $te.removeClass('Q_filter_begun');
+    tool.$results.hide();
+    if (state.fullscreen) {
+      $te.nextAll().each(function () {
+        var $this = $(this);
+        $this.css('display', $this.data('Q/filter display'))
+          .removeData('Q/filter display');
+      });
+      $te.insertAfter(tool.$placeholder);
+      tool.$placeholder.remove();
+      tool.$input.blur();
+      $('body').css('overflow', state.oldBodyOverflow)
+      .removeClass('Q_overflow');
+    }
+    return false;
   },
-  
+*/
+
   // optional methods for your tool
   // that would be called by Qbix
   Q: {
@@ -191,14 +179,12 @@ Q.Tool.define("Assets/amazon", function(options) {
       // then use Q.onLayout(element) instead.
     }
   }
-}
-
-);
+});
 
 Q.Template.set('Assets/amazon/response/wishlist', 
     '<div class="Assets_amazon_image">'
     + '</div>'    
-    + '<div class="Assets_amazon_price">'
+    + '<div class="Assets_amazon_price">Price:'
     + '</div>'
 );
 
@@ -206,11 +192,11 @@ Q.Template.set('Assets/amazon/response/results',
     '{{#if results}}'
     + '<ul>'
     + '{{#each results}}'
-    + '<li class="Wishes_amazon_results_item" data-index={{@index}} data-asin={{ASIN}}>'
-    + '<img class="Wishes_amazon_results_image" src="{{pic}}" alt="{{alt}}">'
+    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}}>'
+    + '<img class="Assets_amazon_results_image" src="{{pic}}" alt="{{alt}}">'
     + '<div>'
-    + '<span class="Wishes_amazon_results_title"><h3>{{title}}</h3></span>'
-    + '<span class="Wishes_amazon_results_price">{{price}}</span>'
+    + '<span class="Assets_amazon_results_title"><h3>{{title}}</h3></span>'
+    + '<span class="Assets_amazon_results_price">{{price}}</span>'
     + '</div>'
     + '<br>'
     + '</li>'

@@ -2,6 +2,7 @@
 
 function Assets_before_Q_responseExtras() {
 	Q_Response::addScript('plugins/Assets/js/Assets.js');
+	Q_Response::addStylesheet("plugins/Assets/css/Assets.css");
 
 	try {
 		$amount = Assets_Credits::amount();
