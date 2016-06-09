@@ -30,14 +30,16 @@ Q.Tool.define("Assets/amazon", function(options) {
   var tool = this;
   var state = tool.state;
   var $te = $(tool.element);
-  
+
   // draw the tool, see method below
   this.refresh();
 
   $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', function (evt) {
+
       console.log('results written');
-      toggleResult = tool.$('.Q_filter_tool').end();
-      return toggleResult;
+
+      tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'));
+      return tool.filter.end();
   });
 },
 
@@ -128,30 +130,6 @@ Q.Tool.define("Assets/amazon", function(options) {
             $te.append(html);
             });
   },
-/*
-  end: function () {
-    var tool = this;
-    var state = tool.state;
-    if (!state.begun || tool.suspended) return;
-    state.begun = false;
-    var $te = $(tool.element);
-    $te.removeClass('Q_filter_begun');
-    tool.$results.hide();
-    if (state.fullscreen) {
-      $te.nextAll().each(function () {
-        var $this = $(this);
-        $this.css('display', $this.data('Q/filter display'))
-          .removeData('Q/filter display');
-      });
-      $te.insertAfter(tool.$placeholder);
-      tool.$placeholder.remove();
-      tool.$input.blur();
-      $('body').css('overflow', state.oldBodyOverflow)
-      .removeClass('Q_overflow');
-    }
-    return false;
-  },
-*/
 
   // optional methods for your tool
   // that would be called by Qbix
