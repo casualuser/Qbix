@@ -103,24 +103,27 @@ Q.Tool.define("Assets/amazon", function(options) {
                               Q.req("Assets/amazon", 'results', 
                                 function (err, response) {
 
-                                  var msg = Q.firstErrorMessage(err, response && response.errors);
-                                  if (msg) {
-                                      return console.warn(msg);
-                                  }
+                                  if (Q.latest(tool, latest)) {                                  
 
-                                  var results = response.slots.results;
-                                  var fields = {results: ''};
-                                  if (results) {
-                                      fields = {results: results};
-                                  }
+                                    var msg = Q.firstErrorMessage(err, response && response.errors);
+                                    if (msg) {
+                                        return console.warn(msg);
+                                    }
 
-                                  Q.Template.render(
-                                      'Assets/amazon/response/results',
-                                      fields,
-                                      function (err, html) {
-                                          $(element).html(html);
-                                      }
-                                  );
+                                    var results = response.slots.results;
+                                    var fields = {results: ''};
+                                    if (results) {
+                                        fields = {results: results};
+                                    }
+
+                                    Q.Template.render(
+                                        'Assets/amazon/response/results',
+                                        fields,
+                                        function (err, html) {
+                                            $(element).html(html);
+                                        }
+                                    );
+                                  }
                                 },
                                 {
                                   fields: {
