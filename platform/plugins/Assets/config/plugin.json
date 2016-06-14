@@ -56,6 +56,14 @@
 				"defaults": {
 					"title": "Service"
 				}
+			},
+			"Assets/amazon": {
+				"description": "Amazon goods",
+				"create": true, 
+				"edit": true,
+				"defaults": {
+					"title": "Amazon goods"
+				}
 			}
 		}	
 	},

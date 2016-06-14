@@ -12,7 +12,7 @@
  * @return {Q.Tool}
  */
 
-Q.Tool.define("Assets/amazon", function(options) {
+Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options) {
 
 /*  
   if (!options.publisherId || !options.streamName) {
@@ -34,12 +34,21 @@ Q.Tool.define("Assets/amazon", function(options) {
   // draw the tool
   tool.refresh();
 
-  console.log(state);
-
   $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', tool, function () {
 
-      Q.Streams.get(state.publisherId, state.streamName, function () {
-        console.log(this.fields);
+      var asin = $(this).attr('data-asin');
+
+      fields = {
+        'publisherId': Q.Users.loggedInUserId(),
+        'type': "Assets/amazon",
+        'name': "Assets/amazon/" + Q.Users.loggedInUserId() + "/" + asin,
+        'attributes': {
+          'asin': asin
+        }
+      };
+
+      Q.Streams.create(fields, function () {
+        console.log('item with id ' + asin + ' saved');
       });
 
       tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'), 'Q/filter');
@@ -57,7 +66,21 @@ Q.Tool.define("Assets/amazon", function(options) {
   onFilter: new Q.Event(),  
   onCreate: new Q.Event(),
   onUpdate: new Q.Event(),
-  onRefresh: new Q.Event()
+  onRefresh: new Q.Event(),
+  templates: {
+    view: {
+      name: 'Assets/amazon/preview/view',
+      fields: { alt: 'icon', titleClass: '', titleTag: 'h2' }
+    },
+    edit: {
+      name: 'Assets/amazon/preview/edit',
+      fields: { alt: 'icon', titleClass: '', titleTag: 'h2' }
+    },
+    create: {
+      name: 'Assets/amazon/preview/edit',
+      fields: { alt: 'icon', titleClass: '', titleTag: 'h2' }
+    }
+  }
 },
 
 { // YOUR TOOL'S METHODS
@@ -188,6 +211,34 @@ Q.Template.set('Assets/amazon/response/results',
     + '{{/each}}'
     + '</ul>'
     + '{{/if}}'
+);
+
+Q.Template.set('Assets/amazon/preview/view',
+  '<div class="Streams_preview_container Streams_preview_view Q_clearfix">'
+  + '<img alt="{{alt}}" class="Assets_amazon_preview_icon">'
+  + '<div class="Assets_amazon_preview_title {{titleClass}}">'
+  + '{{#if showTitle}}'
+  + '<{{titleTag}} class="Streams_preview_title">{{title}}</{{titleTag}}>'
+  + '{{/if}}'
+  + '</div></div>'
+);
+
+Q.Template.set('Assets/amazon/preview/edit',
+  '<div class="Streams_preview_container Streams_preview_edit Q_clearfix">'
+  + '<img alt="{{alt}}" class="Assets_amazon_preview_icon">'
+  + '<div class="Assets_amazon_preview_title {{titleClass}}">'
+  + '{{#if showTitle}}'
+  + '<{{titleTag}} class="Streams_preview_title">{{& inplace}}</{{titleTag}}>'
+  + '{{/if}}'
+  + '</div></div>'
+);
+
+Q.Template.set('Assets/amazon/preview/create',
+  '<div class="Streams_preview_container Streams_preview_create Q_clearfix">'
+  + '<img alt="{{alt}}" class="Streams_preview_add">'
+  + '<div class="Assets_amazon_preview_title {{titleClass}}">'
+  + '<{{titleTag}} class="Streams_preview_title">{{title}}</{{titleTag}}>'
+  + '</div></div>'
 );
 
 
