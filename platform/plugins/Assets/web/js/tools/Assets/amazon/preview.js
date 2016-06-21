@@ -14,12 +14,6 @@
 
 Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options) {
 
-/*  
-  if (!options.publisherId || !options.streamName) {
-    throw "Assets/amazon tool missing something";
-  }
-*/
-
   if (!Q.Users.loggedInUser) {
       tool.element.style.display = 'none';
       console.warn("Assets/amazon: Don't render tool when user is not logged in");
@@ -211,6 +205,10 @@ Q.Template.set('Assets/amazon/response/results',
     + '{{/each}}'
     + '</ul>'
     + '{{/if}}'
+);
+
+Q.Template.set('Assets/amazon/composer',
+  '<button class="Q_button">Wish something new</button>'
 );
 
 Q.Template.set('Assets/amazon/preview/view',
