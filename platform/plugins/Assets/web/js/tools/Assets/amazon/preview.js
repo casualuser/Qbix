@@ -12,7 +12,7 @@
  * @return {Q.Tool}
  */
 
-Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options) {
+Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, preview) {
 
   if (!Q.Users.loggedInUser) {
       tool.element.style.display = 'none';
@@ -20,13 +20,17 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options) {
       return;
   }
 
+  var ps = preview.state;
+  this.preview = preview;
+
   // proceed to construct the tool
   var tool = this;
   var state = tool.state;
   var $te = $(tool.element);
 
   // draw the tool
-  tool.refresh();
+  ps.onRefresh.add(this.refresh.bind(this));
+//  tool.refresh();
 
   $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', tool, function () {
 
@@ -41,40 +45,18 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options) {
         }
       };
 
-      Q.Streams.create(fields, function () {
-        console.log('item with id ' + asin + ' saved');
-      });
-
       tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'), 'Q/filter');
       return tool.filter.end();
   });
 },
 
 { // DEFAULT OPTIONS
-
-  publisherId: null,
-  streamName: null,
-
   onChoose: new Q.Event(),  
   onSelect: new Q.Event(),
   onFilter: new Q.Event(),  
   onCreate: new Q.Event(),
   onUpdate: new Q.Event(),
-  onRefresh: new Q.Event(),
-  templates: {
-    view: {
-      name: 'Assets/amazon/preview/view',
-      fields: { alt: 'icon', titleClass: '', titleTag: 'h2' }
-    },
-    edit: {
-      name: 'Assets/amazon/preview/edit',
-      fields: { alt: 'icon', titleClass: '', titleTag: 'h2' }
-    },
-    create: {
-      name: 'Assets/amazon/preview/edit',
-      fields: { alt: 'icon', titleClass: '', titleTag: 'h2' }
-    }
-  }
+  onRefresh: new Q.Event()
 },
 
 { // YOUR TOOL'S METHODS
