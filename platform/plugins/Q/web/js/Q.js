@@ -6,7 +6,7 @@
  */
 "use strict";
 /* jshint -W014 */
-(function (undefined) {
+(function _Q_setup(undefined, dontSetGlobals) {
 
 var root = this;
 var $ = root.jQuery;
@@ -20,7 +20,7 @@ var _isOnline = null;
  * @constructor
  */
 function Q () {
-	// not called right now
+	// explore the docs at http://qbix.com/platform/client
 }
 
 // external libraries, which you can override
@@ -1510,7 +1510,9 @@ Q.extend = function _Q_extend(target /* [[deep,] [levels,] anotherObject], ... [
 					} else {
 						target[k].set(argk, namespace);
 					}
-				} else if (levels && (target[k] && typeof target[k] === 'object') 
+				} else if (levels 
+				&& target[k]
+				&& (typeof target[k] === 'object' || typeof target[k] === 'function') 
 				&& tak !== 'Q.Event'
 				&& (Q.isPlainObject(argk) || (ttk === 'array' && tak === 'array'))) {
 					target[k] = (ttk === 'array' && ('replace' in argk))
@@ -3298,11 +3300,16 @@ Q.Tool = function _Q_Tool(element, options) {
 			} while (e = e.parentNode);
 		}
 		this.element.id = prefix + Q.Tool.names[this.name].split('/').join('_')
-			'-' + (Q.Tool.nextDefaultId++) + "_tool";
+			+ '-' + (Q.Tool.nextDefaultId++) + "_tool";
 		Q.Tool.nextDefaultId %= 1000000;
 	}
 	this.prefix = Q.Tool.calculatePrefix(this.element.id);
 	this.id = this.prefix.substr(0, this.prefix.length-1);
+	
+	if (Q.Tool.byId(this.id, this.name)) {
+		var toolName = Q.Tool.names[this.name];
+		throw new Q.Error("A " + toolName + " tool with id " + this.id + " is already active");
+	}
 
 	// for later use
 	var classes = (this.element.className && this.element.className.split(/\s+/) || []);
@@ -5195,7 +5202,11 @@ Q.loadNonce = function _Q_loadNonce(callback, context, args) {
 		Q.handle(callback, context, args);
 		return;
 	}
-	Q.req('Q/nonce', 'data', function _Q_loadNonce_nonceLoaded() {
+	Q.req('Q/nonce', 'data', function _Q_loadNonce_nonceLoaded(err, data) {
+		var msg = Q.firstErrorMessage(err, data);
+		if (msg) {
+			throw new Q.Error(msg);
+		}
 		Q.nonce = Q.cookie('Q_nonce');
 		if (Q.nonce) {
 			Q.handle(callback, context, args);
@@ -5994,7 +6005,7 @@ Q.request.callbacks = []; // used by Q.request
  * Try to find an error message assuming typical error data structures for the arguments
  * @static
  * @method firstErrorMessage
- * @param {Object} data an object where the errors may be found, you can pass as many of these as you want
+ * @param {Object} data An object where the errors may be found. You can pass as many of these as you want. If it contains "errors" property, then errors[0] is the first error. If it contains an "error" property, than that's the first error. Otherwise, for the first argument only, if it is nonempty, then it's considered an error.
  * @return {String|null} The first error message found, or null
  */
 Q.firstErrorMessage = function _Q_firstErrorMessage(data /*, data2, ... */) {
@@ -6010,7 +6021,7 @@ Q.firstErrorMessage = function _Q_firstErrorMessage(data /*, data2, ... */) {
 			error = d.error;
 		} else if (Q.isArrayLike(d)) {
 			error = d[0];
-		} else {
+		} else if (!i) {
 			error = d;
 		}
 		if (error) {
@@ -10113,9 +10124,9 @@ Q.Dialogs = {
 	 *	 structure with 'Q_title_slot', 'Q_dialog_slot' and appropriate content in them. 
 	 *   If it's provided, then 'title' and 'content' options given below are ignored.
 	 *	@param {String} [options.url] Optional. If provided, this url will be used 
-	 *  to fetch the "title" and "dialog" slots, to display in the dialog. 
-	 *  Thus the default content provided by 'title' and 'content' options
-	 *  given below will be replaced after the response comes back.
+	 *   to fetch the "title" and "dialog" slots, to display in the dialog. 
+	 *   Thus the default content provided by 'title' and 'content' options
+	 *   given below will be replaced after the response comes back.
 	 *	@param {String|Element} [options.title='Dialog'] initial dialog title.
 	 *	@param {String|Element} [options.content] initial dialog content, defaults to 
 	 *   loading and displaying a throbber immage.
@@ -10129,6 +10140,7 @@ Q.Dialogs = {
 	 *   will be hidden. Thus dialog will occupy all window space, but still 
 	 *   will behave like regular dialog, i.e. it can be closed
 	 *   by clicking / tapping close icon.
+	 *  @param {boolean} [options.hidePrevious=false] Whether to hide the current topmost dialog, and show it again when this newly displayed dialog will be closed
 	 *	@param {HTMLElement, jQuery} [options.appendTo] Can be DOM element, jQuery object 
 	 *    or jQuery selector matching element where dialog should be appended.
 	 *    Moreover, dialog is centered relatively to this element. 
@@ -10555,6 +10567,7 @@ Q.Masks = {
 	 * @param {String} [options.className=''] CSS class name for the mask to style it properly.
 	 * @param {number} [options.fadeIn=0] Milliseconds it should take to fade in the mask
 	 * @param {number} [options.fadeOut=0] Milliseconds it should take to fade out the mask.
+	 * @param {number} [options.zIndex] You can override the mask's default z-index here
 	 * @param {String} [options.html=''] Any HTML to insert into the mask.
 	 * @param {HTMLElement} [options.shouldCover=null] Optional element in the DOM to cover.
 	 * @return {Object} the mask info
@@ -10577,6 +10590,9 @@ Q.Masks = {
 		document.body.appendChild(me);
 		me.style.display = 'none';
 		mask.counter = 0;
+		if (options && options.zIndex) {
+			me.style.zIndex = options.zIndex;
+		}
 		return Q.Masks.collection[key] = mask;
 	},
 	/**
@@ -11049,7 +11065,7 @@ Q.onReady.set(function _Q_masks() {
 if (typeof module !== 'undefined' && typeof process !== 'undefined') {
 	// Assume we are in a Node.js environment, e.g. running tests
 	module.exports = Q;
-} else {
+} else if (!dontSetGlobals) {
 	// We are in a browser environment
 	/**
 	 * This method restores the old window.Q and returns an instance of itself.
@@ -11071,9 +11087,25 @@ if (typeof module !== 'undefined' && typeof process !== 'undefined') {
 	root.Q = Q;
 }
 
+/**
+ * Can be used to construct another instance of Q
+ * (possibly alongside other instances in the document).
+ * This is typically followed by calling Q2.extend(Q2, ...)
+ * to set some properties, followed by a call to Q2.init();
+ * Useful e.g. for bookmarklets and other javascript widgets.
+ * @method anotherQ
+ * @static
+ * @return {Function} Another instance of Q
+ */
+Q.anotherQ = function () {
+	return _Q_setup.call(root, undefined, true); 
+};
+
 Q.globalNames = Object.keys(root); // to find stray globals
 Q.globalNamesAdded = function () {
 	return Q.diff(Object.keys(window), Q.globalNames);
 };
+
+return Q;
 
 }).call(this);
