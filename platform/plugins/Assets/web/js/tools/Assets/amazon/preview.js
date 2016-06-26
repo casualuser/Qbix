@@ -30,24 +30,27 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
   // draw the tool
   ps.onRefresh.add(this.refresh.bind(this));
-//  tool.refresh();
-
+  
   $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', tool, function () {
 
-      var asin = $(this).attr('data-asin');
+      var stream = tool.preview.stream;
 
-      fields = {
-        'publisherId': Q.Users.loggedInUserId(),
-        'type': "Assets/amazon",
-        'name': "Assets/amazon/" + Q.Users.loggedInUserId() + "/" + asin,
-        'attributes': {
-          'asin': asin
-        }
-      };
+      var asin = $(this).attr('data-asin');
+      var title = $(this).attr('data-title');
+
+      stream.fields.title = title;
+      stream.set({'asin': asin});
+      stream.save();
+
+      console.log(stream);
 
       tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'), 'Q/filter');
-      return tool.filter.end();
-  });
+
+      tool.filter.value = '';
+      tool.filter.end();
+  }
+  );
+
 },
 
 { // DEFAULT OPTIONS
@@ -66,7 +69,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
     var state = tool.state;
     var $te = $(tool.element);
 
-    $items = tool.$('[data-assets-amazon], .Assets_amazon_tool');
+    $items = tool.$('[data-assets-amazon], .Assets_amazon_preview_tool');
 
     Q.Template.render(
         'Assets/amazon/response/wishlist',
@@ -86,7 +89,9 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                 tool.prefix + 'filter'
             );
 
-            tool.$(filterAmazon)
+            Q.replace(tool.element, null);
+
+            $(filterAmazon)
                 .appendTo($te)
                 .activate(
                     function () {
@@ -170,13 +175,14 @@ Q.Template.set('Assets/amazon/response/wishlist',
     + '</div>'    
     + '<div class="Assets_amazon_price">Price:'
     + '</div>'
+    + '{{&tool "Streams/inplace" stream=stream inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
 );
 
 Q.Template.set('Assets/amazon/response/results',
     '{{#if results}}'
     + '<ul>'
     + '{{#each results}}'
-    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}}>'
+    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}} data-title={{title}}>'
     + '<img class="Assets_amazon_results_image" src="{{pic}}" alt="{{alt}}">'
     + '<div>'
     + '<span class="Assets_amazon_results_title"><h3>{{title}}</h3></span>'
