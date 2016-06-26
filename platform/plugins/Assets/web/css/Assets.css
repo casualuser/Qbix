@@ -36,7 +36,7 @@
 	overflow: auto;
 }
 
-.Assets_amazon_tool .Assets_amazon_image {
+.Assets_amazon_preview_tool .Assets_amazon_image {
     width: 60px;
     height: 60px;
     margin: 20px;
@@ -44,12 +44,12 @@
     display: inline-block;    
 }
 
-.Assets_amazon_tool  .Assets_amazon_price {
+.Assets_amazon_preview_tool  .Assets_amazon_price {
     display: inline-block;
     vertical-align: top;
     margin-top: 20px;
 }
 
-.Assets_amazon_tool .Assets_amazon_results_image {
+.Assets_amazon_preview_tool .Assets_amazon_results_image {
     width: 80%;
 }
