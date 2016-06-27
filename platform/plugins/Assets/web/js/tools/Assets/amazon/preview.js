@@ -39,14 +39,15 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
       var title = $(this).attr('data-title');
 
       stream.fields.title = title;
-      stream.set({'asin': asin});
+      stream.set({'asin': asin, 'title': title});
       stream.save();
 
       console.log(stream);
 
       tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'), 'Q/filter');
-
-      tool.filter.value = '';
+      tool.filter.input = tool.filter.$('.Q_filter_input');
+      tool.filter.input.attr('value', '');
+      tool.filter.input.next().show();
       tool.filter.end();
   }
   );
@@ -175,7 +176,7 @@ Q.Template.set('Assets/amazon/response/wishlist',
     + '</div>'    
     + '<div class="Assets_amazon_price">Price:'
     + '</div>'
-    + '{{&tool "Streams/inplace" stream=stream inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
+    + '{{&tool "Streams/inplace" inplaceType="text" inplace-placeholder="Name of the wish" attribute="title"}} <br>'
 );
 
 Q.Template.set('Assets/amazon/response/results',
@@ -194,38 +195,5 @@ Q.Template.set('Assets/amazon/response/results',
     + '</ul>'
     + '{{/if}}'
 );
-
-Q.Template.set('Assets/amazon/composer',
-  '<button class="Q_button">Wish something new</button>'
-);
-
-Q.Template.set('Assets/amazon/preview/view',
-  '<div class="Streams_preview_container Streams_preview_view Q_clearfix">'
-  + '<img alt="{{alt}}" class="Assets_amazon_preview_icon">'
-  + '<div class="Assets_amazon_preview_title {{titleClass}}">'
-  + '{{#if showTitle}}'
-  + '<{{titleTag}} class="Streams_preview_title">{{title}}</{{titleTag}}>'
-  + '{{/if}}'
-  + '</div></div>'
-);
-
-Q.Template.set('Assets/amazon/preview/edit',
-  '<div class="Streams_preview_container Streams_preview_edit Q_clearfix">'
-  + '<img alt="{{alt}}" class="Assets_amazon_preview_icon">'
-  + '<div class="Assets_amazon_preview_title {{titleClass}}">'
-  + '{{#if showTitle}}'
-  + '<{{titleTag}} class="Streams_preview_title">{{& inplace}}</{{titleTag}}>'
-  + '{{/if}}'
-  + '</div></div>'
-);
-
-Q.Template.set('Assets/amazon/preview/create',
-  '<div class="Streams_preview_container Streams_preview_create Q_clearfix">'
-  + '<img alt="{{alt}}" class="Streams_preview_add">'
-  + '<div class="Assets_amazon_preview_title {{titleClass}}">'
-  + '<{{titleTag}} class="Streams_preview_title">{{title}}</{{titleTag}}>'
-  + '</div></div>'
-);
-
 
 })(window.jQuery, window);
