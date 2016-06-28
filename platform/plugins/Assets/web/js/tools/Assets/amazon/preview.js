@@ -70,6 +70,8 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
     var state = tool.state;
     var $te = $(tool.element);
 
+    var stream = tool.stream = tool.preview.stream;
+
     $items = tool.$('[data-assets-amazon], .Assets_amazon_preview_tool');
 
     Q.Template.render(
@@ -172,11 +174,9 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 });
 
 Q.Template.set('Assets/amazon/response/wishlist', 
-    '<div class="Assets_amazon_image">'
-    + '</div>'    
-    + '<div class="Assets_amazon_price">Price:'
-    + '</div>'
-    + '{{&tool "Streams/inplace" inplaceType="text" inplace-placeholder="Name of the wish" attribute="title"}} <br>'
+      ''
+    + '{{&tool "Streams/inplace" stream=stream inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
+    
 );
 
 Q.Template.set('Assets/amazon/response/results',
