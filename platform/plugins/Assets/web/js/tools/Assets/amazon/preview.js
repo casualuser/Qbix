@@ -12,6 +12,18 @@
  * @return {Q.Tool}
  */
 
+Handlebars.registerHelper("debug", function(optionalValue) {
+  console.log("Current Context");
+  console.log("====================");
+  console.log(this);
+ 
+  if (optionalValue) {
+    console.log("Value");
+    console.log("====================");
+    console.log(optionalValue);
+  }
+});
+
 Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, preview) {
 
   if (!Q.Users.loggedInUser) {
@@ -70,7 +82,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
     var state = tool.state;
     var $te = $(tool.element);
 
-    var stream = tool.stream = tool.preview.stream;
+    var stream = tool.stream = tool.state.stream = tool.preview.stream;
 
     $items = tool.$('[data-assets-amazon], .Assets_amazon_preview_tool');
 
@@ -107,10 +119,10 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
                               var latest = Q.latest(tool);
 
-                              Q.req("Assets/amazon", 'results', 
+                              Q.req("Assets/amazon", 'results',
                                 function (err, response) {
 
-                                  if (Q.latest(tool, latest)) {                                  
+                                  if (Q.latest(tool, latest)) {
 
                                     var msg = Q.firstErrorMessage(err, response && response.errors);
                                     if (msg) {
@@ -175,15 +187,19 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
 Q.Template.set('Assets/amazon/response/wishlist', 
       ''
-    + '{{&tool "Streams/inplace" stream=stream inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
-    
+    + '<div>{{debug this}}</div>'
+    + '{{&tool "Streams/inplace" publisherId=tool.stream.publisherId streamName=tool.stream.streamName inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
+
+//    + '{{&tool "Streams/inplace" inplaceType="text" inplace-placeholder="Name of the wish" attribute="title"}} <br>'
+//    + '{{&tool "Streams/inplace" publisherId=publisherId streamName=streamName inplaceType="text" inplace-placeholder="Name of the good"}}'
+//    + '<h1>{{&tool "Streams/inplace" publisherId=publisherId streamName=streamName inplaceType="text" inplace-placeholder="Name of the good" field="asin"}}</h1>'
 );
 
 Q.Template.set('Assets/amazon/response/results',
     '{{#if results}}'
     + '<ul>'
     + '{{#each results}}'
-    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}} data-title={{title}}>'
+    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}} data-title={{{title}}}>'
     + '<img class="Assets_amazon_results_image" src="{{pic}}" alt="{{alt}}">'
     + '<div>'
     + '<span class="Assets_amazon_results_title"><h3>{{title}}</h3></span>'
