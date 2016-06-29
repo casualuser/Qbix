@@ -61,8 +61,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
       tool.filter.input.attr('value', '');
       tool.filter.input.next().show();
       tool.filter.end();
-  }
-  );
+  });
 
 },
 
@@ -79,11 +78,11 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
   refresh: function (callback) {
     var tool = this;
+    tool.state = tool.preview.state;
     var state = tool.state;
     var $te = $(tool.element);
 
-    var options = tool.options;
-    var stream = tool.stream = options.stream = state.stream = tool.preview.stream;
+    var options = tool.options = tool.preview.options;
 
     $items = tool.$('[data-assets-amazon], .Assets_amazon_preview_tool');
 
@@ -96,8 +95,6 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                 return;
             }
 
-//            var options = {};
-
             var filterAmazon = Q.Tool.setUpElement(
                 'div',
                 'Q/filter',
@@ -105,9 +102,8 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                 tool.prefix + 'filter'
             );
 
-            var e = Q.Tool.setUpElement('div', "Streams/inplace", options);
-            tool.element.appendChild(e);
-            Q.activate(e);
+            var e = Q.Tool.setUpElement(tool.element, "Streams/inplace", options);
+            Q.activate(e, options);
 
             Q.replace(tool.element, null);
 
@@ -156,7 +152,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                               });
 
                           }, tool);
-                });
+                }, options);
 
             $te.append(html);
             }, options);
