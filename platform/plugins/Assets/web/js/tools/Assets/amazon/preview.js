@@ -83,7 +83,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
     var $te = $(tool.element);
 
     var options = tool.options;
-    var stream = tool.stream = options.stream = tool.state.stream = tool.preview.stream;
+    var stream = tool.stream = options.stream = state.stream = tool.preview.stream;
 
     $items = tool.$('[data-assets-amazon], .Assets_amazon_preview_tool');
 
@@ -159,7 +159,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                 });
 
             $te.append(html);
-            });
+            }, options);
   },
 
   // optional methods for your tool
@@ -192,8 +192,8 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
 Q.Template.set('Assets/amazon/response/wishlist', 
       ''
-    + '<div>{{debug this}}</div>'
-    + '{{&tool "Streams/inplace" publisherId=tool.stream.publisherId streamName=tool.stream.streamName inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
+//    + '<div>{{debug options}}</div>'
+//    + '{{&tool "Streams/inplace" publisherId=publisherId streamName=streamName inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
 
 //    + '{{&tool "Streams/inplace" inplaceType="text" inplace-placeholder="Name of the wish" attribute="title"}} <br>'
 //    + '{{&tool "Streams/inplace" publisherId=publisherId streamName=streamName inplaceType="text" inplace-placeholder="Name of the good"}}'
