@@ -82,7 +82,8 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
     var state = tool.state;
     var $te = $(tool.element);
 
-    var stream = tool.stream = tool.state.stream = tool.preview.stream;
+    var options = tool.options;
+    var stream = tool.stream = options.stream = tool.state.stream = tool.preview.stream;
 
     $items = tool.$('[data-assets-amazon], .Assets_amazon_preview_tool');
 
@@ -95,7 +96,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                 return;
             }
 
-            var options = {};
+//            var options = {};
 
             var filterAmazon = Q.Tool.setUpElement(
                 'div',
@@ -103,6 +104,10 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                 options,
                 tool.prefix + 'filter'
             );
+
+            var e = Q.Tool.setUpElement('div', "Streams/inplace", options);
+            tool.element.appendChild(e);
+            Q.activate(e);
 
             Q.replace(tool.element, null);
 
