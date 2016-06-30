@@ -12,24 +12,12 @@
  * @return {Q.Tool}
  */
 
-Handlebars.registerHelper("debug", function(optionalValue) {
-  console.log("Current Context");
-  console.log("====================");
-  console.log(this);
- 
-  if (optionalValue) {
-    console.log("Value");
-    console.log("====================");
-    console.log(optionalValue);
-  }
-});
-
 Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, preview) {
 
   if (!Q.Users.loggedInUser) {
-      tool.element.style.display = 'none';
+    tool.element.style.display = 'none';
       console.warn("Assets/amazon: Don't render tool when user is not logged in");
-      return;
+    return;
   }
 
   var ps = preview.state;
@@ -42,19 +30,31 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
   // draw the tool
   ps.onRefresh.add(this.refresh.bind(this));
-  
+
   $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', tool, function () {
 
-      var streamName = tool.preview.state.streamName
+      state.streamName = tool.preview.state.streamName;
+      state.publisherId = tool.preview.state.publisherId;
 
       var asin = $(this).attr('data-asin');
       var title = $(this).attr('data-title');
 
-      stream.fields.title = title;
-      stream.set({'asin': asin, 'title': title});
-      stream.save();
+      Q.Streams.get(state.publisherId, state.streamName, function(err) {
 
-      console.log(stream);
+        if (err) return;
+
+        this.set({
+          'asin': asin, 
+          'title': title
+          // 'icon': icon,
+          // 'title': title,
+          // 'price': price, 
+          // 'productId': productId,
+          // 'storeId': storeId,
+          // 'currency': currency
+        });
+        this.save();
+      });
 
       tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'), 'Q/filter');
       tool.filter.input = tool.filter.$('.Q_filter_input');
@@ -91,12 +91,10 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
         $items,
         function (err, html) {
 
+            if (err) return;
+
             var ps = tool.preview.state;
             var options = Q.extend(options, tool.preview.state);
-
-            if (err) {
-                return;
-            }
 
             var filterAmazon = Q.Tool.setUpElement(
                 'div',
