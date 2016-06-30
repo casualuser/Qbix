@@ -45,7 +45,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
   
   $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', tool, function () {
 
-      var stream = tool.preview.stream;
+      var streamName = tool.preview.state.streamName
 
       var asin = $(this).attr('data-asin');
       var title = $(this).attr('data-title');
@@ -76,7 +76,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
 { // YOUR TOOL'S METHODS
 
-  refresh: function (callback) {
+  refresh: function (stream) {
     var tool = this;
     tool.state = tool.preview.state;
     var state = tool.state;
@@ -91,6 +91,9 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
         $items,
         function (err, html) {
 
+            var ps = tool.preview.state;
+            var options = Q.extend(options, tool.preview.state);
+
             if (err) {
                 return;
             }
@@ -102,10 +105,17 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                 tool.prefix + 'filter'
             );
 
-            var e = Q.Tool.setUpElement(tool.element, "Streams/inplace", options);
-            Q.activate(e, options);
-
             Q.replace(tool.element, null);
+
+            var e = Q.Tool.setUpElement('div', "Streams/inplace", options);
+//            Q.activate(e, options);
+
+            $(e)
+              .appendTo($te)
+              .activate(
+              {
+                '.Streams_inplace_tool': options
+              });
 
             $(filterAmazon)
                 .appendTo($te)
@@ -189,7 +199,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 Q.Template.set('Assets/amazon/response/wishlist', 
       ''
 //    + '<div>{{debug options}}</div>'
-//    + '{{&tool "Streams/inplace" publisherId=publisherId streamName=streamName inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
+    + '{{&tool "Streams/inplace" publisherId=options.publisherId streamName=options.streamName inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
 
 //    + '{{&tool "Streams/inplace" inplaceType="text" inplace-placeholder="Name of the wish" attribute="title"}} <br>'
 //    + '{{&tool "Streams/inplace" publisherId=publisherId streamName=streamName inplaceType="text" inplace-placeholder="Name of the good"}}'
