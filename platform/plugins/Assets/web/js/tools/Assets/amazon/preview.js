@@ -94,7 +94,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
             if (err) return;
 
             var ps = tool.preview.state;
-            var options = Q.extend(options, tool.preview.state);
+            var options = Q.extend(options, tool.preview.state); 
 
             var filterAmazon = Q.Tool.setUpElement(
                 'div',
@@ -105,15 +105,11 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
             Q.replace(tool.element, null);
 
-            var e = Q.Tool.setUpElement('div', "Streams/inplace", options);
-//            Q.activate(e, options);
+            var e = Q.Tool.setUpElement('div', "Streams/inplace", Q.extend(options, {attribute: 'title'}));
 
             $(e)
               .appendTo($te)
-              .activate(
-              {
-                '.Streams_inplace_tool': options
-              });
+              .activate();
 
             $(filterAmazon)
                 .appendTo($te)
@@ -194,21 +190,13 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
   }
 });
 
-Q.Template.set('Assets/amazon/response/wishlist', 
-      ''
-//    + '<div>{{debug options}}</div>'
-    + '{{&tool "Streams/inplace" publisherId=options.publisherId streamName=options.streamName inplaceType="text" inplace-placeholder="Name of the good" attribute="asin"}}'
-
-//    + '{{&tool "Streams/inplace" inplaceType="text" inplace-placeholder="Name of the wish" attribute="title"}} <br>'
-//    + '{{&tool "Streams/inplace" publisherId=publisherId streamName=streamName inplaceType="text" inplace-placeholder="Name of the good"}}'
-//    + '<h1>{{&tool "Streams/inplace" publisherId=publisherId streamName=streamName inplaceType="text" inplace-placeholder="Name of the good" field="asin"}}</h1>'
-);
+Q.Template.set('Assets/amazon/response/wishlist', '');
 
 Q.Template.set('Assets/amazon/response/results',
     '{{#if results}}'
     + '<ul>'
     + '{{#each results}}'
-    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}} data-title={{{title}}}>'
+    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}} data-title={{title}}>'
     + '<img class="Assets_amazon_results_image" src="{{pic}}" alt="{{alt}}">'
     + '<div>'
     + '<span class="Assets_amazon_results_title"><h3>{{title}}</h3></span>'
