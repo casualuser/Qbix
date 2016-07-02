@@ -38,6 +38,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
       var asin = $(this).attr('data-asin');
       var title = $(this).attr('data-title');
+      var image = $(this).attr('data-image');
 
       Q.Streams.get(state.publisherId, state.streamName, function(err) {
 
@@ -45,8 +46,8 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
         this.set({
           'asin': asin, 
-          'title': title
-          // 'icon': icon,
+          'title': title,
+          'icon': image
           // 'title': title,
           // 'price': price, 
           // 'productId': productId,
@@ -105,12 +106,6 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
             Q.replace(tool.element, null);
 
-            var e = Q.Tool.setUpElement('div', "Streams/inplace", Q.extend(options, {attribute: 'title'}));
-
-            $(e)
-              .appendTo($te)
-              .activate();
-
             $(filterAmazon)
                 .appendTo($te)
                 .activate(
@@ -158,6 +153,12 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                           }, tool);
                 }, options);
 
+            var e = Q.Tool.setUpElement('div', "Streams/inplace", Q.extend(options, {attribute: 'title'}));
+
+            $(e)
+              .appendTo($te)
+              .activate();
+
             $te.append(html);
             }, options);
   },
@@ -190,13 +191,14 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
   }
 });
 
-Q.Template.set('Assets/amazon/response/wishlist', '');
+Q.Template.set('Assets/amazon/response/wishlist', 
+  '<img class="Assets_amazon_preview_image" src="{{pic}}" alt="">');
 
 Q.Template.set('Assets/amazon/response/results',
     '{{#if results}}'
     + '<ul>'
     + '{{#each results}}'
-    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}} data-title={{title}}>'
+    + '<li class="Assets_amazon_results_item" data-index={{@index}} data-asin={{ASIN}} data-title="{{title}}" data-image={{pic}}>'
     + '<img class="Assets_amazon_results_image" src="{{pic}}" alt="{{alt}}">'
     + '<div>'
     + '<span class="Assets_amazon_results_title"><h3>{{title}}</h3></span>'
