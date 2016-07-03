@@ -33,18 +33,23 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
   $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', tool, function () {
 
-      state.streamName = tool.preview.state.streamName;
-      state.publisherId = tool.preview.state.publisherId;
+      options.streamName = tool.preview.state.streamName;
+      options.publisherId = tool.preview.state.publisherId;
 
       var asin = $(this).attr('data-asin');
       var title = $(this).attr('data-title');
       var image = $(this).attr('data-image');
 
-      Q.Streams.get(state.publisherId, state.streamName, function(err) {
+      Q.Streams.get(options.publisherId, options.streamName, function(err) {
 
         if (err) return;
 
-        this.set({
+        var stream = this;
+
+        stream.fields.title = title;
+        stream.fields.icon = image;
+
+        stream.set({
           'asin': asin, 
           'title': title,
           'icon': image
@@ -54,7 +59,8 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
           // 'storeId': storeId,
           // 'currency': currency
         });
-        this.save();
+        stream.save();
+        stream.refresh();
       });
 
       tool.filter = Q.Tool.from(tool.$('.Q_filter_tool'), 'Q/filter');
@@ -79,11 +85,12 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
   refresh: function (stream) {
     var tool = this;
-    tool.state = tool.preview.state;
     var state = tool.state;
     var $te = $(tool.element);
+    var options = {};
 
-    var options = tool.options = tool.preview.options;
+    options.streamName = tool.preview.state.streamName;
+    options.publisherId = tool.preview.state.publisherId;
 
     $items = tool.$('[data-assets-amazon], .Assets_amazon_preview_tool');
 
@@ -94,8 +101,8 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
             if (err) return;
 
-            var ps = tool.preview.state;
-            var options = Q.extend(options, tool.preview.state); 
+            options.streamName = tool.preview.state.streamName;
+            options.publisherId = tool.preview.state.publisherId;
 
             var filterAmazon = Q.Tool.setUpElement(
                 'div',
@@ -155,8 +162,8 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
 
             var e = Q.Tool.setUpElement('div', "Streams/preview", options, tool.prefix + 'stream');
-            Q.Tool.setUpElement(e, "Streams/image/preview", options, tool.prefix + 'image');
-            Q.Tool.setUpElement(e, "Streams/inplace", Q.extend(options, {attribute: 'title'}), tool.prefix + 'title');
+            Q.Tool.setUpElement(e, "Streams/image/preview", Q.extend(options, {editable: false, closeable: false} ), tool.prefix + 'image');
+//            Q.Tool.setUpElement(e, "Streams/inplace", Q.extend(options, {field: 'title'}), tool.prefix + 'title');
 
             tool.element.appendChild(e);
             Q.activate(e);
@@ -193,8 +200,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
   }
 });
 
-Q.Template.set('Assets/amazon/response/wishlist', 
-  '<img class="Assets_amazon_preview_image" src="{{pic}}" alt="">');
+Q.Template.set('Assets/amazon/response/wishlist', '');
 
 Q.Template.set('Assets/amazon/response/results',
     '{{#if results}}'
