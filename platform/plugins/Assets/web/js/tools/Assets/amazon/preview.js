@@ -153,11 +153,13 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
                           }, tool);
                 }, options);
 
-            var e = Q.Tool.setUpElement('div', "Streams/inplace", Q.extend(options, {attribute: 'title'}));
 
-            $(e)
-              .appendTo($te)
-              .activate();
+            var e = Q.Tool.setUpElement('div', "Streams/preview", options, tool.prefix + 'stream');
+            Q.Tool.setUpElement(e, "Streams/image/preview", options, tool.prefix + 'image');
+            Q.Tool.setUpElement(e, "Streams/inplace", Q.extend(options, {attribute: 'title'}), tool.prefix + 'title');
+
+            tool.element.appendChild(e);
+            Q.activate(e);
 
             $te.append(html);
             }, options);
