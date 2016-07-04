@@ -46,14 +46,14 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
         var stream = this;
 
-        stream.fields.title = title;
-        stream.fields.icon = image;
+        stream.pendingFields = 
+          { title: title,
+            icon: image };
 
         stream.set({
           'asin': asin, 
           'title': title,
           'icon': image
-          // 'title': title,
           // 'price': price, 
           // 'productId': productId,
           // 'storeId': storeId,
@@ -163,7 +163,6 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
 
             var e = Q.Tool.setUpElement('div', "Streams/preview", options, tool.prefix + 'stream');
             Q.Tool.setUpElement(e, "Streams/image/preview", Q.extend(options, {editable: false, closeable: false} ), tool.prefix + 'image');
-//            Q.Tool.setUpElement(e, "Streams/inplace", Q.extend(options, {field: 'title'}), tool.prefix + 'title');
 
             tool.element.appendChild(e);
             Q.activate(e);
