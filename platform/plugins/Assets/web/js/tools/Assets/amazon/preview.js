@@ -92,10 +92,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
     options.streamName = tool.preview.state.streamName;
     options.publisherId = tool.preview.state.publisherId;
 
-    Q.Streams.get(options.publisherId, options.streamName, function(err, stream) { var stream = tool.stream = this; });
-    var stream = tool.stream;
-    var icon = stream.fields.icon;
-    var fields = {icon: icon};
+    var fields = {icon: tool.preview.stream.fields.icon};
 
     Q.Template.render(
         'Assets/amazon/response/wishlist',
