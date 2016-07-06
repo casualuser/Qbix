@@ -29,7 +29,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
   var $te = $(tool.element);
 
   // draw the tool
-  ps.onRefresh.add(this.refresh.bind(this));
+  ps.onRefresh.add(tool.refresh.bind(tool), tool);
 
   $te.on(Q.Pointer.fastclick, '.Assets_amazon_results_item', tool, function () {
 
@@ -163,6 +163,14 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
             var e = Q.Tool.setUpElement('div', "Streams/preview", options, tool.prefix + 'stream');
             Q.Tool.setUpElement(e, "Streams/inplace", Q.extend(options, {field: 'title'}), tool.prefix + 'title');
 
+            Q.Streams.Stream.onFieldChanged(options.publisherId, options.streamName, 'icon').set(
+
+            //handler
+            function (fields) {
+              var src = fields.icon;
+              tool.$(".Streams_image_preview_icon").attr('src', src);
+            }, tool);
+
             tool.element.appendChild(e);
             Q.activate(e);
 
@@ -198,7 +206,7 @@ Q.Tool.define("Assets/amazon/preview", "Streams/preview", function(options, prev
   }
 });
 
-Q.Template.set('Assets/amazon/response/wishlist', '<img src="{{icon}}">');
+Q.Template.set('Assets/amazon/response/wishlist', '<img alt="{{alt}}" class="Streams_image_preview_icon" src={{icon}}>');
 
 Q.Template.set('Assets/amazon/response/results',
     '{{#if results}}'
